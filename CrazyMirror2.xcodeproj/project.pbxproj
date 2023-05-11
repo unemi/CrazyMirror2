@@ -1,0 +1,394 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		232892312A0C8FB700DFA7AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2328922F2A0C8FB700DFA7AF /* InfoPlist.strings */; };
+		234F6E3D2A068454005FF303 /* MyShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 234F6E3C2A068454005FF303 /* MyShaders.metal */; };
+		235B18A72A05041A00F217BA /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 235B18A62A05041A00F217BA /* MetalKit.framework */; };
+		237ED9DF2A0CA84500626BAF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 237ED9E12A0CA84500626BAF /* Credits.rtf */; };
+		23B3A06C2A034E9D00EA96A5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B3A06B2A034E9D00EA96A5 /* AppDelegate.m */; };
+		23B3A06E2A034E9E00EA96A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23B3A06D2A034E9E00EA96A5 /* Assets.xcassets */; };
+		23B3A0712A034E9E00EA96A5 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 23B3A06F2A034E9E00EA96A5 /* MainMenu.xib */; };
+		23B3A0732A034E9E00EA96A5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B3A0722A034E9E00EA96A5 /* main.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2328922E2A0C7F5000DFA7AF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		232892302A0C8FB700DFA7AF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		234F6E3B2A0682CC005FF303 /* VecTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VecTypes.h; sourceTree = "<group>"; };
+		234F6E3C2A068454005FF303 /* MyShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MyShaders.metal; sourceTree = "<group>"; };
+		235B18A62A05041A00F217BA /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		237ED9E02A0CA84500626BAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
+		237ED9E22A0CA84C00626BAF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = ja; path = ja.lproj/Credits.rtf; sourceTree = "<group>"; };
+		23B3A0672A034E9D00EA96A5 /* Crazy Mirror 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Crazy Mirror 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23B3A06A2A034E9D00EA96A5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		23B3A06B2A034E9D00EA96A5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		23B3A06D2A034E9E00EA96A5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		23B3A0702A034E9E00EA96A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		23B3A0722A034E9E00EA96A5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		23B3A0742A034E9E00EA96A5 /* CrazyMirror2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CrazyMirror2.entitlements; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		23B3A0642A034E9D00EA96A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				235B18A72A05041A00F217BA /* MetalKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		235B18A52A05041A00F217BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				235B18A62A05041A00F217BA /* MetalKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		23B3A05E2A034E9D00EA96A5 = {
+			isa = PBXGroup;
+			children = (
+				23B3A0692A034E9D00EA96A5 /* CrazyMirror2 */,
+				23B3A0682A034E9D00EA96A5 /* Products */,
+				235B18A52A05041A00F217BA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		23B3A0682A034E9D00EA96A5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23B3A0672A034E9D00EA96A5 /* Crazy Mirror 2.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		23B3A0692A034E9D00EA96A5 /* CrazyMirror2 */ = {
+			isa = PBXGroup;
+			children = (
+				23B3A06A2A034E9D00EA96A5 /* AppDelegate.h */,
+				23B3A06B2A034E9D00EA96A5 /* AppDelegate.m */,
+				234F6E3B2A0682CC005FF303 /* VecTypes.h */,
+				234F6E3C2A068454005FF303 /* MyShaders.metal */,
+				23B3A06D2A034E9E00EA96A5 /* Assets.xcassets */,
+				23B3A06F2A034E9E00EA96A5 /* MainMenu.xib */,
+				2328922F2A0C8FB700DFA7AF /* InfoPlist.strings */,
+				23B3A0722A034E9E00EA96A5 /* main.m */,
+				237ED9E12A0CA84500626BAF /* Credits.rtf */,
+				23B3A0742A034E9E00EA96A5 /* CrazyMirror2.entitlements */,
+			);
+			path = CrazyMirror2;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		23B3A0662A034E9D00EA96A5 /* Crazy Mirror 2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23B3A0772A034E9E00EA96A5 /* Build configuration list for PBXNativeTarget "Crazy Mirror 2" */;
+			buildPhases = (
+				23B3A0632A034E9D00EA96A5 /* Sources */,
+				23B3A0642A034E9D00EA96A5 /* Frameworks */,
+				23B3A0652A034E9D00EA96A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Crazy Mirror 2";
+			productName = CrazyMirror2;
+			productReference = 23B3A0672A034E9D00EA96A5 /* Crazy Mirror 2.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		23B3A05F2A034E9D00EA96A5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					23B3A0662A034E9D00EA96A5 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+				};
+			};
+			buildConfigurationList = 23B3A0622A034E9D00EA96A5 /* Build configuration list for PBXProject "CrazyMirror2" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ja,
+			);
+			mainGroup = 23B3A05E2A034E9D00EA96A5;
+			productRefGroup = 23B3A0682A034E9D00EA96A5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				23B3A0662A034E9D00EA96A5 /* Crazy Mirror 2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		23B3A0652A034E9D00EA96A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23B3A06E2A034E9E00EA96A5 /* Assets.xcassets in Resources */,
+				23B3A0712A034E9E00EA96A5 /* MainMenu.xib in Resources */,
+				232892312A0C8FB700DFA7AF /* InfoPlist.strings in Resources */,
+				237ED9DF2A0CA84500626BAF /* Credits.rtf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		23B3A0632A034E9D00EA96A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				234F6E3D2A068454005FF303 /* MyShaders.metal in Sources */,
+				23B3A0732A034E9E00EA96A5 /* main.m in Sources */,
+				23B3A06C2A034E9D00EA96A5 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2328922F2A0C8FB700DFA7AF /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				232892302A0C8FB700DFA7AF /* ja */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		237ED9E12A0CA84500626BAF /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				237ED9E02A0CA84500626BAF /* Base */,
+				237ED9E22A0CA84C00626BAF /* ja */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		23B3A06F2A034E9E00EA96A5 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				23B3A0702A034E9E00EA96A5 /* Base */,
+				2328922E2A0C7F5000DFA7AF /* ja */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		23B3A0752A034E9E00EA96A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		23B3A0762A034E9E00EA96A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		23B3A0782A034E9E00EA96A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 726X5Z9867;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Capture any image as source data of deformation.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		23B3A0792A034E9E00EA96A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 726X5Z9867;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Capture any image as source data of deformation.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
+				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		23B3A0622A034E9D00EA96A5 /* Build configuration list for PBXProject "CrazyMirror2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23B3A0752A034E9E00EA96A5 /* Debug */,
+				23B3A0762A034E9E00EA96A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23B3A0772A034E9E00EA96A5 /* Build configuration list for PBXNativeTarget "Crazy Mirror 2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23B3A0782A034E9E00EA96A5 /* Debug */,
+				23B3A0792A034E9E00EA96A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 23B3A05F2A034E9D00EA96A5 /* Project object */;
+}

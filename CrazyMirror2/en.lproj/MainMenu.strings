@@ -1,0 +1,153 @@
+
+/* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "1UK-8n-QPP"; */
+"1UK-8n-QPP.title" = "Customize Toolbar…";
+
+/* Class = "NSMenuItem"; title = "CrazyMirror2"; ObjectID = "1Xt-HY-uBw"; */
+"1Xt-HY-uBw.title" = "CrazyMirror2";
+
+/* Class = "NSMenu"; title = "Effects"; ObjectID = "4Bx-Wd-UTU"; */
+"4Bx-Wd-UTU.title" = "Effects";
+
+/* Class = "NSMenuItem"; title = "Enter Full Screen"; ObjectID = "4J7-dP-txa"; */
+"4J7-dP-txa.title" = "Enter Full Screen";
+
+/* Class = "NSMenuItem"; title = "Quit CrazyMirror2"; ObjectID = "4sb-4s-VLi"; */
+"4sb-4s-VLi.title" = "Quit CrazyMirror2";
+
+/* Class = "NSToolbarItem"; label = "Fullscreen"; ObjectID = "5cb-Tz-MXU"; */
+"5cb-Tz-MXU.label" = "Fullscreen";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Fullscreen"; ObjectID = "5cb-Tz-MXU"; */
+"5cb-Tz-MXU.paletteLabel" = "Fullscreen";
+
+/* Class = "NSMenuItem"; title = "About CrazyMirror2"; ObjectID = "5kV-Vb-QxS"; */
+"5kV-Vb-QxS.title" = "About CrazyMirror2";
+
+/* Class = "NSMenuItem"; title = "Zjvdgycboo"; ObjectID = "7ny-Rz-gbu"; */
+"7ny-Rz-gbu.title" = "Zjvdgycboo";
+
+/* Class = "NSMenuItem"; title = "Hahehohu"; ObjectID = "9gb-AB-esz"; */
+"9gb-AB-esz.title" = "Hahehohu";
+
+/* Class = "NSTextFieldCell"; title = "sec."; ObjectID = "A0a-xq-0q1"; */
+"A0a-xq-0q1.title" = "sec.";
+
+/* Class = "NSMenu"; title = "Main Menu"; ObjectID = "AYu-sK-qS6"; */
+"AYu-sK-qS6.title" = "Main Menu";
+
+/* Class = "NSMenuItem"; title = "Hnalalaa"; ObjectID = "B77-Sd-Rbf"; */
+"B77-Sd-Rbf.title" = "Hnalalaa";
+
+/* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "BOF-NM-1cW"; */
+"BOF-NM-1cW.title" = "Preferences…";
+
+/* Class = "NSMenuItem"; title = "Shavazzz"; ObjectID = "F22-p4-TD3"; */
+"F22-p4-TD3.title" = "Shavazzz";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "F2S-fz-NVQ"; */
+"F2S-fz-NVQ.title" = "Help";
+
+/* Class = "NSMenuItem"; title = "CrazyMirror2 Help"; ObjectID = "FKE-Sm-Kum"; */
+"FKE-Sm-Kum.title" = "CrazyMirror2 Help";
+
+/* Class = "NSMenuItem"; title = "View"; ObjectID = "H8h-7b-M4v"; */
+"H8h-7b-M4v.title" = "View";
+
+/* Class = "NSMenu"; title = "View"; ObjectID = "HyV-fh-RgO"; */
+"HyV-fh-RgO.title" = "View";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
+"Kd2-mp-pUS.title" = "Show All";
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "LE2-aR-0XJ"; */
+"LE2-aR-0XJ.title" = "Bring All to Front";
+
+/* Class = "NSMenuItem"; title = "Services"; ObjectID = "NMo-om-nkz"; */
+"NMo-om-nkz.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "OY7-WF-poV"; */
+"OY7-WF-poV.title" = "Minimize";
+
+/* Class = "NSMenuItem"; title = "Hide CrazyMirror2"; ObjectID = "Olw-nP-bQN"; */
+"Olw-nP-bQN.title" = "Hide CrazyMirror2";
+
+/* Class = "NSWindow"; title = "Crazy Mirror 2"; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "Crazy Mirror 2";
+
+/* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "R4o-n2-Eq4"; */
+"R4o-n2-Eq4.title" = "Zoom";
+
+/* Class = "NSToolbarItem"; label = "Auto"; ObjectID = "RQu-CP-MWC"; */
+"RQu-CP-MWC.label" = "Auto";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Auto"; ObjectID = "RQu-CP-MWC"; */
+"RQu-CP-MWC.paletteLabel" = "Auto";
+
+/* Class = "NSMenuItem"; title = "Zjvdgycboo"; ObjectID = "SY6-fC-VhK"; */
+"SY6-fC-VhK.title" = "Zjvdgycboo";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "Td7-aD-5lo"; */
+"Td7-aD-5lo.title" = "Window";
+
+/* Class = "NSToolbarItem"; label = "Interval"; ObjectID = "VG6-VM-Kvo"; */
+"VG6-VM-Kvo.label" = "Interval";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Interval"; ObjectID = "VG6-VM-Kvo"; */
+"VG6-VM-Kvo.paletteLabel" = "Interval";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
+"Vdr-fp-XzO.title" = "Hide Others";
+
+/* Class = "NSMenuItem"; title = "Shavazzz"; ObjectID = "Ydv-ke-XSZ"; */
+"Ydv-ke-XSZ.title" = "Shavazzz";
+
+/* Class = "NSMenuItem"; title = "Close"; ObjectID = "Zv5-th-oRh"; */
+"Zv5-th-oRh.title" = "Close";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "aUF-d1-5bR"; */
+"aUF-d1-5bR.title" = "Window";
+
+/* Class = "NSToolbarItem"; label = "Effects"; ObjectID = "bsP-Xe-90f"; */
+"bsP-Xe-90f.label" = "Effects";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Effects"; ObjectID = "bsP-Xe-90f"; */
+"bsP-Xe-90f.paletteLabel" = "Effects";
+
+/* Class = "NSMenuItem"; title = "Howawaan"; ObjectID = "e2X-bf-OJ4"; */
+"e2X-bf-OJ4.title" = "Howawaan";
+
+/* Class = "NSMenuItem"; title = "Hahehohu"; ObjectID = "hsA-gZ-frV"; */
+"hsA-gZ-frV.title" = "Hahehohu";
+
+/* Class = "NSMenu"; title = "Services"; ObjectID = "hz9-B4-Xy5"; */
+"hz9-B4-Xy5.title" = "Services";
+
+/* Class = "NSMenuItem"; title = "Hnolelee"; ObjectID = "iRE-OX-v2a"; */
+"iRE-OX-v2a.title" = "Hnolelee";
+
+/* Class = "NSMenuItem"; title = "Effects"; ObjectID = "igg-gV-KXR"; */
+"igg-gV-KXR.title" = "Effects";
+
+/* Class = "NSMenuItem"; title = "Howawaan"; ObjectID = "o7I-mn-Ijt"; */
+"o7I-mn-Ijt.title" = "Howawaan";
+
+/* Class = "NSMenuItem"; title = "Hnolelee"; ObjectID = "pOi-17-QgI"; */
+"pOi-17-QgI.title" = "Hnolelee";
+
+/* Class = "NSMenuItem"; title = "Hnalalaa"; ObjectID = "pjl-7d-8bm"; */
+"pjl-7d-8bm.title" = "Hnalalaa";
+
+/* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "snW-S8-Cw5"; */
+"snW-S8-Cw5.title" = "Show Toolbar";
+
+/* Class = "NSMenu"; title = "CrazyMirror2"; ObjectID = "uQy-DD-JDr"; */
+"uQy-DD-JDr.title" = "CrazyMirror2";
+
+/* Class = "NSMenuItem"; title = "Auto"; ObjectID = "v9I-PF-OiY"; */
+"v9I-PF-OiY.title" = "Auto";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "wpr-3q-Mcd"; */
+"wpr-3q-Mcd.title" = "Help";
+
+/* Class = "NSTextFieldCell"; title = "999.9"; ObjectID = "xZk-tP-9BR"; */
+"xZk-tP-9BR.title" = "999.9";
