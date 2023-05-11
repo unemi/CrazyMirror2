@@ -32,6 +32,8 @@
 		23B3A0702A034E9E00EA96A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		23B3A0722A034E9E00EA96A5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23B3A0742A034E9E00EA96A5 /* CrazyMirror2.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CrazyMirror2.entitlements; sourceTree = "<group>"; };
+		23F49FEA2A0CD8C8003386D8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		23F49FF52A0CF002003386D8 /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Web; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +59,8 @@
 		23B3A05E2A034E9D00EA96A5 = {
 			isa = PBXGroup;
 			children = (
+				23F49FEA2A0CD8C8003386D8 /* README.md */,
+				23F49FF52A0CF002003386D8 /* Web */,
 				23B3A0692A034E9D00EA96A5 /* CrazyMirror2 */,
 				23B3A0682A034E9D00EA96A5 /* Products */,
 				235B18A52A05041A00F217BA /* Frameworks */,

@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<link rel="icon" href="icon16x16.png" type="image/x-icon" />
+<link rel="shortcut icon" href="icon16x16.png" type="image/x-icon" />
+<title>Crazy Mirror 2</title>
+<style type="text/css">
+body{background:#EEE;font-family:Futura,Helvetica}
+table{text-align:center}
+.title{font-weight:bold;font-size:28pt}
+p{margin:1ex}
+.button{text-align:center;font-size:20pt}
+.button span{padding:5pt;background:#FD8;border:4px outset}
+.foot{font-size:small}
+</style>
+<script>
+function setup() {
+	if (window.innerWidth > 800)
+		document.getElementById("content").style.columnCount = 2;
+}
+</script>
+</head>
+<body onload="setup()">
+<div id="content">
+<table align="center"><tr>
+<td rowspan=2><img src="icon160x160.png" align="top" height="80px"></img></td>
+<td class="title">&nbsp;Crazy Mirror 2&nbsp;</td>
+<td rowspan=2><img src="screenShot1.png" align="top" height="80px"></img></td></tr>
+<tr><td>&copy; <a href="http://www.intlab.soka.ac.jp/~unemi/">Tatsuo Unemi</a>, 2023.</td></tr>
+</table>
+<p>
+This is a useless application for fun that runs on macOS 11 or later with Full HD camera.
+It runs both on Intel and Apple Silicon CPUs, but Intel GPU is not powerful enough for smooth framerate
+in complicated effects.
+</p><p>
+<a href="http://www.intlab.soka.ac.jp/~unemi/1/CrazyMirror/">The original version</a>
+was developed in 2005 with iSight camera and QuickTime APIs.
+It got not working on newer operating system, but finally it revived by totally new coding including Metal shader codes.
+</p><p>
+When you feel tired at your work, please launch this software, shake your head slowly, move your shoulder up and down, blink your eyes, and then take three deep breaths.
+</p><p>
+If you feel still tired, try another mode by choosing an effect from the popup menu button named
+<b>Effects</b> in the tool bar.
+Sorry, but we don't guarantee the effects on your feeling.
+</p><p class="button">
+<span>
+<a href="CrazyMirror2_10.dmg">Download</a>
+</span>
+</p>
+</div>
+<hr>
+<div class="foot">Created on May 11, 2023.</div>
+</body>
+</html>

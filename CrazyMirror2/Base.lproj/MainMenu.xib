@@ -180,7 +180,7 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="1B2537FB-5BD1-413B-AFE5-7AE40EF92939" label="Auto" paletteLabel="Auto" sizingBehavior="auto" id="RQu-CP-MWC">
                         <nil key="toolTip"/>
-                        <switch key="view" horizontalHuggingPriority="750" verticalHuggingPriority="750" controlSize="small" baseWritingDirection="leftToRight" alignment="left" state="on" id="4zL-FM-805">
+                        <switch key="view" horizontalHuggingPriority="750" verticalHuggingPriority="750" controlSize="small" baseWritingDirection="leftToRight" alignment="left" id="4zL-FM-805">
                             <rect key="frame" x="0.0" y="14" width="36" height="21"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <connections>
