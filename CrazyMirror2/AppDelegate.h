@@ -9,16 +9,23 @@
 @import AVFoundation;
 @import MetalKit;
 @import simd;
+
 #import "VecTypes.h"
 // interval of auto-alternation of effects in second.
 #define AUTO_INTERVAL 10.
+
+extern void err_msg(NSString *msg, BOOL fatal);
 
 @interface AppDelegate : NSObject
 	<NSApplicationDelegate, NSWindowDelegate>
 @end
 
+@class MediaShare;
 @interface CrazyMirror : MTKView
 	<AVCaptureVideoDataOutputSampleBufferDelegate, NSMenuItemValidation> {
+	NSArray<AVCaptureDevice *> *cameras;
+	AVCaptureDeviceDiscoverySession *devSearch;
+	AVCaptureDevice *camera;
 	AVCaptureSession *ses;
 	MTLRenderPipelineDescriptor *pplnStDesc;
 	id<MTLLibrary> dfltLib;
@@ -33,11 +40,16 @@
 	simd_float3 floatInfo;
 	BOOL isARM;
 //
-	IBOutlet NSPopUpButton *efctPopUp;
+	IBOutlet NSToolbarItem *photoItem, *videoItem;
+	IBOutlet NSPopUpButton *cameraPopUp, *efctPopUp;
 	IBOutlet NSSwitch *autoSwitch;
 	IBOutlet NSTextField *intervalDgt;
 	IBOutlet NSTextField *fullScrMsg;
 	NSTimer *alternator, *fullScrMsgTimer;
+	NSSound *cameraShutterSnd;
+	BOOL takePhoto, recVideo;
+	NSImage *videoItemImg;
+	MediaShare *mediaShare;
 }
 - (IBAction)chooseEffect:(NSPopUpButton *)sender;
 - (IBAction)toggleAutoAlternate:(NSSwitch *)sender;
@@ -45,4 +57,7 @@
 - (IBAction)toggleAutoAltByMenu:(NSMenuItem *)sender;
 @end
 
-#define MyAssert(test,...) if ((test)==0) err_msg([NSString stringWithFormat:__VA_ARGS__]);
+#define MyErrMsg(f,test,fmt,...) if ((test)==0)\
+ err_msg([NSString stringWithFormat:NSLocalizedString(fmt,nil),__VA_ARGS__],f);
+#define MyAssert(test,fmt,...) MyErrMsg(YES,test,fmt,__VA_ARGS__)
+#define MyWarning(test,fmt,...) MyErrMsg(NO,test,fmt,__VA_ARGS__)

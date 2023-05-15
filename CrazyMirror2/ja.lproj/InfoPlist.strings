@@ -1,1 +1,3 @@
 CFBundleName = "くれぃじぃみらぁ2";
+"NSCameraUsageDescription" = "効果をかける元データをカメラから取り込みます。";
+"NSPhotoLibraryUsageDescription" = "写真やビデオを「写真アプリ」のライブラリに保存します。";

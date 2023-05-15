@@ -1,0 +1,7 @@
+body {background:#EEE}
+table {text-align:center}
+.title {font-weight:bold;font-size:28pt}
+p {margin:1ex}
+.button {text-align:center;font-size:16pt}
+.button span {padding:5pt;background:#FD8;border:4px outset}
+.foot {font-size:small}

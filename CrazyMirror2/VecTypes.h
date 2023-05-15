@@ -17,9 +17,9 @@
 #define EFCT_TYPE intInfo[5]
 #define N_INT_INFOS 6
 
-#define DIFS_BACK 0x100
-#define EFCT_CHANGED 0x80
 #define EFCT_MASK 0x7f
+#define EFCT_CHANGED 0x80
+#define DIFS_BACK	(EFCT_CHANGED<<1)
 
 enum {
 	ArgAvrgMask = 1,

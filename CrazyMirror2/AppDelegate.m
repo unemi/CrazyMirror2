@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MediaShare.h"
 #include <sys/time.h>
 #include <sys/sysctl.h>
 
@@ -17,13 +18,13 @@ static unsigned long current_time_ms(void) {
 	if (startSec == 0) startSec = tm.tv_sec;
 	return (tm.tv_sec - startSec) * 1000 + tm.tv_usec / 1000;
 }
-static void err_msg(NSString *msg) {
+void err_msg(NSString *msg, BOOL fatal) {
 	void (^block)(void) = ^{
 		NSAlert *alt = NSAlert.new;
 		alt.alertStyle = NSAlertStyleCritical;
 		alt.messageText = msg;
 		[alt runModal];
-		[NSApp terminate:nil];
+		if (fatal) [NSApp terminate:nil];
 	};
 	if (NSThread.isMainThread) block();
 	else dispatch_async(dispatch_get_main_queue(), block);
@@ -34,7 +35,7 @@ static BOOL check_hw_arch(void) {
 	char archName[128];
 	memset(archName, 0, 128);
 	if (sysctl(mib, 2, archName, &dataSize, NULL, 0) < 0)
-		err_msg(@"Couldn't get architecture type.");
+		err_msg(@"Couldn't get architecture type.", YES);
 	return strcmp(archName, "x86_64") != 0;
 }
 struct {
@@ -48,7 +49,42 @@ struct {
 	{@"shavazzz", ArgLRndMask},
 	{@"hahehohu", ArgAvrgMask | ArgBlurMask | ArgDifsMask}
 };
+static NSString *keyPhotoCount = @"PhotoCount", *keyVideoCount = @"VideoCount";
+
 @implementation CrazyMirror
+- (void)setupCamera:(AVCaptureDevice *)cam {
+	NSError *error;
+	AVCaptureDeviceInput *devIn = [AVCaptureDeviceInput deviceInputWithDevice:cam error:&error];
+	MyWarning(devIn, @"Cannot make a video device input. %@", error);
+	if (devIn == nil) return;
+	AVCaptureDeviceInput *orgDevIn = nil;
+	if (ses.inputs.count > 0) [ses removeInput:(orgDevIn = ses.inputs[0])];
+	BOOL canAddIt = [ses canAddInput:devIn];
+	MyWarning(canAddIt, @"Cannot add input.",nil)
+	if (canAddIt) {
+		[ses addInput:devIn];
+		camera = cam;
+	} else if (orgDevIn != nil) [ses addInput:orgDevIn];
+}
+- (void)setupCameraList:(NSArray<AVCaptureDevice *> *)camList {
+	MyAssert(camList.count, @"No Camera available.",nil);
+	[cameraPopUp removeAllItems];
+	for (AVCaptureDevice *dev in camList)
+		[cameraPopUp addItemWithTitle:dev.localizedName];
+	if (camera != nil) {
+		if (![camList containsObject:camera]) {
+			[cameraPopUp selectItemAtIndex:0];
+			[self setupCamera:camList[0]];
+		} else [cameraPopUp selectItemWithTitle:camera.localizedName];
+	} else [self setupCamera:camList[0]];
+	cameras = camList;
+}
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
+	change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
+	if (object == devSearch) {
+		[self setupCameraList:change[NSKeyValueChangeNewKey]];
+	}
+}
 - (id<MTLComputePipelineState>)makeCompPL:(NSString *)name {
 	id<MTLFunction> func = [dfltLib newFunctionWithName:name];
 	MyAssert(func, @"Cannot make %@.", name);
@@ -66,17 +102,18 @@ struct {
 //
 //	Initialize capture session by default camera
 	ses = AVCaptureSession.new;
+	devSearch = [AVCaptureDeviceDiscoverySession
+		discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera,
+			AVCaptureDeviceTypeExternalUnknown]
+			mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionUnspecified];
+	[self setupCameraList:devSearch.devices];
+	[devSearch addObserver:self forKeyPath:@"devices"
+		options:NSKeyValueObservingOptionNew context:nil];
 	AVCaptureSessionPreset preset = AVCaptureSessionPreset1920x1080;
 	MyAssert([ses canSetSessionPreset:preset], @"Cannot set session preset as %@.", preset);
 	ses.sessionPreset = preset;
-	AVCaptureDevice *dev = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-	NSError *error;
-	AVCaptureDeviceInput *devIn = [AVCaptureDeviceInput deviceInputWithDevice:dev error:&error];
-	MyAssert(devIn, @"Cannot make a video device input. %@", error);
-	MyAssert([ses canAddInput:devIn], @"Cannot add input.");
-	[ses addInput:devIn];
 	AVCaptureVideoDataOutput *vOut = AVCaptureVideoDataOutput.new;
-	MyAssert([ses canAddOutput:vOut], @"Cannot add output.");
+	MyAssert([ses canAddOutput:vOut], @"Cannot add output.",nil);
 	[ses addOutput:vOut];
 //	NSLog(@"%@", vOut.availableVideoCVPixelFormatTypes);
 	vOut.videoSettings = @{(NSString *)kCVPixelBufferPixelFormatTypeKey:@(kCVPixelFormatType_32ARGB)};
@@ -91,7 +128,7 @@ struct {
 	pl4Difs = [self makeCompPL:@"diffuseFunction"];
 	pl4Copy = [self makeCompPL:@"copyImgFunction"];
 	id<MTLFunction> func = [dfltLib newFunctionWithName:@"vertexShader"];
-	MyAssert(func, @"Cannot make vertexShader");
+	MyAssert(func, @"Cannot make vertexShader",nil);
 	pplnStDesc.vertexFunction = func;
 	MTLRenderPipelineColorAttachmentDescriptor *colAttDesc = pplnStDesc.colorAttachments[0];
 	colAttDesc.pixelFormat = self.colorPixelFormat;
@@ -174,6 +211,24 @@ struct {
 	[cce setBytes:&blurInfo length:sizeof(blurInfo) atIndex:idx ++];
 	[self dispatchThreads:cce pl:pl];
 }
+static NSBitmapImageRep *make_bitmap_from_buffer(
+	id<MTLBuffer> buf, NSInteger width, NSInteger height) {
+	NSBitmapImageRep *imgRep = [NSBitmapImageRep.alloc initWithBitmapDataPlanes:NULL
+		pixelsWide:width pixelsHigh:height bitsPerSample:8 samplesPerPixel:4
+		hasAlpha:YES isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace
+		bitmapFormat:NSBitmapFormatAlphaFirst
+		bytesPerRow:width * 4 bitsPerPixel:32];
+	simd_uchar4 *src = buf.contents, *dst = (simd_uchar4 *)imgRep.bitmapData;
+	for (NSInteger i = 0; i < height; i ++)
+		for (NSInteger j = 0; j < width; j ++)
+			dst[(i + 1) * width - 1 - j] = src[i * width + j].wzyx;
+	return imgRep;
+}
+- (void)stopVideoRecording {
+	mediaShare = nil;
+	recVideo = NO;
+	self.framebufferOnly = YES;
+}
 - (void)drawRect:(NSRect)dirtyRect {
 	if (frmsBuffer == nil) return;
 	id<MTLCommandBuffer> cmdBuf = commandQueue.commandBuffer;
@@ -202,6 +257,7 @@ struct {
 		[self dispatchThreads:cce pl:pl4Copy];
 		idx = 0;
 	}
+	if (takePhoto && !recVideo) self.framebufferOnly = NO;
 	id<MTLRenderCommandEncoder> rce =
 		[cmdBuf renderCommandEncoderWithDescriptor:self.currentRenderPassDescriptor];
 	NSSize viewSize = self.drawableSize;
@@ -222,11 +278,51 @@ struct {
 	[rce endEncoding];
 	[cmdBuf presentDrawable:self.currentDrawable];
 
+	id<MTLBuffer> frameImageBuf = nil;
+	NSUInteger texW = 0, texH = 0;
+	if (takePhoto || recVideo) {
+		id<MTLTexture> tex = self.currentDrawable.texture;
+		MyAssert(tex, @"Failed to get texture from MTKView.", nil);
+		texW = tex.width; texH = tex.height;
+		frameImageBuf = [tex.device newBufferWithLength:texW * texH * 4
+			options:MTLResourceStorageModeShared];
+		MyAssert(frameImageBuf, @"Failed to create buffer for %ld bytes.", texW * texH * 4);
+		id<MTLBlitCommandEncoder> blitEnc = cmdBuf.blitCommandEncoder;
+		[blitEnc copyFromTexture:tex sourceSlice:0 sourceLevel:0
+			sourceOrigin:(MTLOrigin){0, 0, 0} sourceSize:(MTLSize){texW, texH, 1}
+			toBuffer:frameImageBuf destinationOffset:0
+			destinationBytesPerRow:texW * 4 destinationBytesPerImage:texW * texH * 4];
+		[blitEnc endEncoding];
+	}
 	[cmdBuf commit];
 	[cmdBuf waitUntilCompleted];
 	[frmsBufLock unlock];
 	EFCT_TYPE &= ~ EFCT_CHANGED;
 	if (mask & ArgDifsMask) EFCT_TYPE ^= DIFS_BACK;
+	if (takePhoto || recVideo) {
+		NSBitmapImageRep *imgRep = make_bitmap_from_buffer(frameImageBuf, texW, texH);
+		imgRep.size = self.bounds.size;
+		if (takePhoto) {
+			NSImage *orgImg = photoItem.image;
+			photoItem.image = [NSImage imageWithSystemSymbolName:
+				@"camera.fill" accessibilityDescription:nil];
+			if (cameraShutterSnd == nil) cameraShutterSnd = [NSSound soundNamed:@"CameraShutter"];
+			[cameraShutterSnd play];
+			NSInteger photoCount = [NSUserDefaults.standardUserDefaults integerForKey:keyPhotoCount];
+			share_as_photo(imgRep, photoCount, self.window, ^{
+				self->photoItem.image = orgImg;
+				[NSUserDefaults.standardUserDefaults
+					setInteger:photoCount + 1 forKey:keyPhotoCount];});
+			takePhoto = NO;
+			if (!recVideo) self.framebufferOnly = YES;
+		}
+		if (recVideo) {
+			if (mediaShare == nil) mediaShare = [MediaShare.alloc initWithImgRep:imgRep
+				ID:[NSUserDefaults.standardUserDefaults integerForKey:keyVideoCount]
+				parent:self.window];
+			if (![mediaShare addFrameImgRep:imgRep]) [self stopVideoRecording];
+		}
+	}
 }
 //
 - (void)showFullScrMessage {
@@ -255,10 +351,39 @@ struct {
 	// ESC key stops full screen
 	if (self.inFullScreenMode) {
 		if (event.keyCode == 53) [self stopFullScreen];
-		else [self showFullScrMessage];
+		else if ((event.modifierFlags & (NSEventModifierFlagOption|NSEventModifierFlagCommand)) == 0)
+			[self showFullScrMessage];
+		else [super keyDown:event];
 	} else [super keyDown:event];
 }
 //
+- (IBAction)chooseCamera:(id)sender {
+	AVCaptureDevice *newCam = cameras[cameraPopUp.indexOfSelectedItem];
+	if (newCam != camera) [self setupCamera:newCam];
+}
+- (IBAction)takePhoto:(id)sender {
+	takePhoto = YES;
+}
+- (IBAction)recordVideo:(id)sender {
+	if (recVideo) {
+		NSInteger ID = mediaShare.ID;
+		[mediaShare finishWithHandler:^{
+			[NSUserDefaults.standardUserDefaults setInteger:ID + 1 forKey:keyVideoCount];
+		}];
+		[self stopVideoRecording];
+		[(VideoRecordingView *)videoItem.view stopAnimation];
+		videoItem.view = nil;
+		videoItem.image = videoItemImg;
+		videoItem.target = self;
+		videoItem.action = @selector(recordVideo:);
+	} else {
+		recVideo = YES;
+		self.framebufferOnly = NO;
+		videoItemImg = videoItem.image;
+		videoItem.image = nil;
+		videoItem.view = [VideoRecordingView.alloc initWithItem:videoItem];
+	}
+}
 - (IBAction)fullscreen:(id)sender {	// for Tool bar button
 	[self enterFullScreenMode:self.window.screen withOptions:
 		@{NSFullScreenModeAllScreens:@NO}];
@@ -311,6 +436,9 @@ struct {
 			userInfo:nil repeats:YES];
 	}
 }
+- (IBAction)toggleToolbarShown:(id)sender {
+	[self.window toggleToolbarShown:sender];
+}
 //
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	SEL action = menuItem.action;
@@ -318,13 +446,17 @@ struct {
 		menuItem.state = (EFCT_TYPE & EFCT_MASK) == menuItem.tag;
 	else if (action == @selector(toggleAutoAltByMenu:))
 		menuItem.state = alternator != nil;
+	else if (action == @selector(toggleToolbarShown:))
+		menuItem.title = NSLocalizedString(
+			self.window.toolbar.visible? @"Hide Toolbar" : @"Show Toolbar", nil);
 	return YES;
 }
 @end
 
 @implementation AppDelegate
-//- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-//}
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	clear_useless_video_files();
+}
 //- (void)applicationWillTerminate:(NSNotification *)aNotification {
 //}
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
