@@ -54,32 +54,32 @@
                         <items>
                             <menuItem title="Hnalalaa" keyEquivalent="0" id="B77-Sd-Rbf">
                                 <connections>
-                                    <action selector="chooseEffectMyMenu:" target="acQ-d4-Vt8" id="hJj-N9-YvS"/>
+                                    <action selector="chooseEffectByMenu:" target="acQ-d4-Vt8" id="hJj-N9-YvS"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Howawaan" tag="1" keyEquivalent="1" id="e2X-bf-OJ4">
                                 <connections>
-                                    <action selector="chooseEffectMyMenu:" target="acQ-d4-Vt8" id="EaE-TR-UF4"/>
+                                    <action selector="chooseEffectByMenu:" target="acQ-d4-Vt8" id="EaE-TR-UF4"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Zjvdgycboo" tag="2" keyEquivalent="2" id="7ny-Rz-gbu">
                                 <connections>
-                                    <action selector="chooseEffectMyMenu:" target="acQ-d4-Vt8" id="Aqc-my-wDM"/>
+                                    <action selector="chooseEffectByMenu:" target="acQ-d4-Vt8" id="Aqc-my-wDM"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Hnolelee" tag="3" keyEquivalent="3" id="pOi-17-QgI">
                                 <connections>
-                                    <action selector="chooseEffectMyMenu:" target="acQ-d4-Vt8" id="VvF-wH-iig"/>
+                                    <action selector="chooseEffectByMenu:" target="acQ-d4-Vt8" id="VvF-wH-iig"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Shavazzz" tag="4" keyEquivalent="4" id="F22-p4-TD3">
                                 <connections>
-                                    <action selector="chooseEffectMyMenu:" target="acQ-d4-Vt8" id="lQV-ip-yUt"/>
+                                    <action selector="chooseEffectByMenu:" target="acQ-d4-Vt8" id="lQV-ip-yUt"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Hahehohu" tag="5" keyEquivalent="5" id="9gb-AB-esz">
                                 <connections>
-                                    <action selector="chooseEffectMyMenu:" target="acQ-d4-Vt8" id="pv0-eK-U8T"/>
+                                    <action selector="chooseEffectByMenu:" target="acQ-d4-Vt8" id="pv0-eK-U8T"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="cjJ-U9-x2y"/>
@@ -109,6 +109,30 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="hB3-LF-h0Y"/>
+                            <menuItem title="800 x 450" keyEquivalent="1" id="hXo-xL-b1Q">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                <connections>
+                                    <action selector="resizeWindow:" target="acQ-d4-Vt8" id="cSX-Qg-BAg"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="1024 x 576" keyEquivalent="2" id="xLF-Mw-aeK">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                <connections>
+                                    <action selector="resizeWindow:" target="acQ-d4-Vt8" id="UDS-8Y-8uv"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="1280 x 720" keyEquivalent="3" id="eIf-iF-qgF">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                <connections>
+                                    <action selector="resizeWindow:" target="acQ-d4-Vt8" id="82G-KB-rHN"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="1600 x 900" keyEquivalent="4" id="ZTT-EK-I4W">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES"/>
+                                <connections>
+                                    <action selector="resizeWindow:" target="acQ-d4-Vt8" id="n8s-qU-jy3"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
                                 <connections>
                                     <action selector="toggleFullScreen:" target="acQ-d4-Vt8" id="Ih6-LM-sW4"/>
@@ -154,7 +178,7 @@
                     </menu>
                 </menuItem>
             </items>
-            <point key="canvasLocation" x="200" y="121"/>
+            <point key="canvasLocation" x="-165" y="221"/>
         </menu>
         <window title="Crazy Mirror 2" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="disallowed" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
@@ -170,9 +194,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="576"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
+                            <outlet property="autoItem" destination="RQu-CP-MWC" id="NCx-nR-Oaz"/>
                             <outlet property="autoSwitch" destination="4zL-FM-805" id="Sil-Pv-B1e"/>
                             <outlet property="cameraPopUp" destination="Xsv-2b-488" id="i0T-YP-rIZ"/>
                             <outlet property="efctPopUp" destination="Nci-Kw-vwe" id="fc1-P7-FXL"/>
+                            <outlet property="fullScrMenu" destination="XxJ-Uf-J7v" id="53R-wR-rDc"/>
                             <outlet property="fullScrMsg" destination="Udy-GI-KmB" id="HAz-Bu-cfK"/>
                             <outlet property="intervalDgt" destination="FAj-rO-QdE" id="ZAw-04-4DM"/>
                             <outlet property="photoItem" destination="fVA-68-AUA" id="5gu-YK-hTF"/>
@@ -314,17 +340,29 @@
             <point key="canvasLocation" x="190" y="742"/>
         </window>
         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.59999999999999998" id="Udy-GI-KmB">
-            <rect key="frame" x="0.0" y="0.0" width="818" height="56"/>
+            <rect key="frame" x="0.0" y="0.0" width="824" height="60"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <textFieldCell key="cell" lineBreakMode="clipping" title="Push [ESC] key to stop full screen mode." drawsBackground="YES" id="L2r-x3-dUL">
+            <textFieldCell key="cell" title="Push [ESC] key to stop full screen mode." drawsBackground="YES" id="L2r-x3-dUL">
                 <font key="font" metaFont="system" size="48"/>
                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
             </textFieldCell>
-            <point key="canvasLocation" x="120" y="228"/>
+            <point key="canvasLocation" x="90" y="319"/>
         </textField>
+        <menu id="XxJ-Uf-J7v">
+            <items>
+                <menuItem title="Exit from Full Screen" image="arrow.down.right.and.arrow.up.left" catalog="system" id="sKA-NS-kYa">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="toggleFullScreen:" target="acQ-d4-Vt8" id="KFE-Ra-4eA"/>
+                    </connections>
+                </menuItem>
+            </items>
+            <point key="canvasLocation" x="400" y="227"/>
+        </menu>
     </objects>
     <resources>
+        <image name="arrow.down.right.and.arrow.up.left" catalog="system" width="16" height="15"/>
         <image name="camera" catalog="system" width="19" height="15"/>
         <image name="toolbarItem:5cb-Tz-MXU:image" width="16" height="15">
             <mutableData key="keyedArchiveRepresentation">

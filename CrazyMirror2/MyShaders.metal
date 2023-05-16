@@ -93,7 +93,7 @@ fragment float4 hnolelee(RasterizerData in [[stage_in]],
 	device float4 *avrgImg, device float4 *blurImg) {
 	uint pidx = pixelIndex(FRM_BPR, in.pt, floatInfo->xy);
 	return vSmooth(intInfo, frms, uint2(in.pt * floatInfo->xy),
-		frameDiff(avrgImg, blurImg, pidx, .05, 2.));
+		frameDiff(avrgImg, blurImg, pidx, .05, 1.5));
 }
 fragment float4 shavazzz(RasterizerData in [[stage_in]],
 	constant uint *intInfo, constant float3 *floatInfo, constant uchar4 *frms,

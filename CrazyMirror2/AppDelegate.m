@@ -51,6 +51,15 @@ struct {
 };
 static NSString *keyPhotoCount = @"PhotoCount", *keyVideoCount = @"VideoCount";
 
+@implementation NSMenu (MyExtension)
+- (void)addItemWithToolbarItem:(NSToolbarItem *)tbItem {
+	NSMenuItem *newItem = [self addItemWithTitle:tbItem.label
+		action:tbItem.action keyEquivalent:@""];
+	newItem.target = tbItem.target;
+	newItem.image = tbItem.image;
+}
+@end
+
 @implementation CrazyMirror
 - (void)setupCamera:(AVCaptureDevice *)cam {
 	NSError *error;
@@ -94,6 +103,12 @@ static NSString *keyPhotoCount = @"PhotoCount", *keyVideoCount = @"VideoCount";
 	MyAssert(pl, @"Cannot make ComputePipelineState for %@. %@", name, error);
 	return pl;
 }
+- (void)checkHidingCursor:(id)object {
+	if (!self.inFullScreenMode) return;
+	if (cursorHidingTimer.isValid) [cursorHidingTimer invalidate];
+	cursorHidingTimer = [NSTimer scheduledTimerWithTimeInterval:.5 repeats:NO block:
+		^(NSTimer * _Nonnull timer) { [NSCursor setHiddenUntilMouseMoves:YES];}];
+}
 - (void)awakeFromNib {
 	[super awakeFromNib];
 	isARM = check_hw_arch();
@@ -134,8 +149,37 @@ static NSString *keyPhotoCount = @"PhotoCount", *keyVideoCount = @"VideoCount";
 	colAttDesc.pixelFormat = self.colorPixelFormat;
 	commandQueue = self.device.newCommandQueue;
 //
+	NSMenuItem *item = [fullScrMenu itemAtIndex:0];
+	[fullScrMenu removeItemAtIndex:0];
+	[fullScrMenu addItemWithToolbarItem:photoItem];
+	[fullScrMenu addItemWithToolbarItem:videoItem];
+	[fullScrMenu addItem:NSMenuItem.separatorItem];
+	NSMenu *srcMenu = efctPopUp.menu;
+	for (NSInteger i = 0; i < srcMenu.numberOfItems; i ++) {
+		NSMenuItem *newItem = [fullScrMenu addItemWithTitle:[srcMenu itemAtIndex:i].title
+			action:@selector(chooseEffectByMenu:) keyEquivalent:@""];
+		newItem.tag = i;
+		newItem.target = self;
+	}
+	[fullScrMenu addItem:NSMenuItem.separatorItem];
+	NSMenuItem *aItem = [fullScrMenu addItemWithTitle:autoItem.label
+		action:@selector(toggleAutoAltByMenu:) keyEquivalent:@""];
+	aItem.target = self;
+	[fullScrMenu addItem:NSMenuItem.separatorItem];
+	[fullScrMenu addItem:item];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(checkHidingCursor:) name:NSMenuDidEndTrackingNotification object:fullScrMenu];
+//
 	[self chooseEffect:efctPopUp];
 	[self toggleAutoAlternate:autoSwitch];
+//
+	NSSize sz = self.frame.size;
+	if (sz.height != sz.width * 9. / 16.) {
+		NSRect winFrm = self.window.frame;
+		CGFloat dH = sz.width * 9. / 16. - sz.height;
+		winFrm.size.height += dH;
+		winFrm.origin.y -= dH;
+		[self.window setFrame:winFrm display:NO];
+	}
 }
 //
 - (id<MTLBuffer>)makeImgBufferWithSize:(NSInteger)size name:(NSString *)name {
@@ -266,7 +310,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	simd_float2 vertices[4] = {{-1, -1},{-1, 1},{1, -1},{1, 1}};
 	[rce setVertexBytes:vertices length:sizeof(vertices) atIndex:0];
 	[rce setFragmentBytes:intInfo length:sizeof(intInfo) atIndex:idx ++];
-	floatInfo.z = (current_time_ms() % 30000) / 30000.f;
+	floatInfo.z = (current_time_ms() % 10000) / 10000.f;
 	[rce setFragmentBytes:&floatInfo length:sizeof(floatInfo) atIndex:idx ++];
 	[rce setFragmentBuffer:frmsBuffer offset:0 atIndex:idx ++];
 	if (mask & ArgAvrgMask) [rce setFragmentBuffer:avrgImgBuffer offset:0 atIndex:idx ++];
@@ -309,7 +353,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 			if (cameraShutterSnd == nil) cameraShutterSnd = [NSSound soundNamed:@"CameraShutter"];
 			[cameraShutterSnd play];
 			NSInteger photoCount = [NSUserDefaults.standardUserDefaults integerForKey:keyPhotoCount];
-			share_as_photo(imgRep, photoCount, self.window, ^{
+			share_as_photo(imgRep, photoCount, self, ^{
 				self->photoItem.image = orgImg;
 				[NSUserDefaults.standardUserDefaults
 					setInteger:photoCount + 1 forKey:keyPhotoCount];});
@@ -318,8 +362,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 		}
 		if (recVideo) {
 			if (mediaShare == nil) mediaShare = [MediaShare.alloc initWithImgRep:imgRep
-				ID:[NSUserDefaults.standardUserDefaults integerForKey:keyVideoCount]
-				parent:self.window];
+				ID:[NSUserDefaults.standardUserDefaults integerForKey:keyVideoCount] view:self];
 			if (![mediaShare addFrameImgRep:imgRep]) [self stopVideoRecording];
 		}
 	}
@@ -337,15 +380,56 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 		[fullScrMsg setFrameOrigin:msgRct.origin];
 		[self addSubview:fullScrMsg];
 	}
-	fullScrMsgTimer = [NSTimer scheduledTimerWithTimeInterval:6 repeats:NO
+	fullScrMsgClock = 0.;
+	fullScrMsgTimer = [NSTimer scheduledTimerWithTimeInterval:1/30. repeats:YES
 		block:^(NSTimer * _Nonnull timer) {
-		[self->fullScrMsg removeFromSuperview];
+		if ((self->fullScrMsgClock += 1/90.) >= 1.) {
+			[self->fullScrMsg removeFromSuperview];
+			[timer invalidate];
+		}
+		self->fullScrMsg.alphaValue = (1. - pow(self->fullScrMsgClock, 2.)) * .6;
 	}];
 }
+- (void)setupRecordingIndicator {
+	if (recIndicator == nil) {
+		recIndicator = [VideoRecordingView.alloc initWithItem:videoItem];
+		videoItemImg = videoItem.image;
+	}
+	if (self.inFullScreenMode) {
+		[recIndicator setFrameOrigin:(NSPoint){10, NSMaxY(self.bounds) - 30}];
+		[self addSubview:recIndicator];
+	} else {
+		videoItem.image = nil;
+		videoItem.view = recIndicator;
+	}
+	[recIndicator startAnimation];
+}
+- (void)resignRecordingIndicator {
+	[recIndicator stopAnimation];
+	if (self.inFullScreenMode) {
+		[recIndicator removeFromSuperview];
+	} else {
+		videoItem.view = nil;
+		videoItem.image = videoItemImg;
+		videoItem.target = self;
+		videoItem.action = @selector(recordVideo:);
+	}
+}
 - (void)stopFullScreen {
-	if (fullScrMsgTimer.isValid) [fullScrMsgTimer fire];
+	if (fullScrMsgTimer.isValid) {
+		fullScrMsgClock = 1.;
+		[fullScrMsgTimer fire];
+	}
+	if (recVideo) [self resignRecordingIndicator];
+	for (NSView *view in self.subviews) {
+		[view removeFromSuperview];
+		if ([view isKindOfClass:VideoRecordingView.class])
+			videoItem.view = view;
+	}
 	[self exitFullScreenModeWithOptions:nil];
 	[NSCursor setHiddenUntilMouseMoves:NO];
+	self.menu = nil;
+	if (recVideo) [self setupRecordingIndicator];
 }
 - (void)keyDown:(NSEvent *)event {
 	// ESC key stops full screen
@@ -371,24 +455,32 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 			[NSUserDefaults.standardUserDefaults setInteger:ID + 1 forKey:keyVideoCount];
 		}];
 		[self stopVideoRecording];
-		[(VideoRecordingView *)videoItem.view stopAnimation];
-		videoItem.view = nil;
-		videoItem.image = videoItemImg;
-		videoItem.target = self;
-		videoItem.action = @selector(recordVideo:);
+		[self resignRecordingIndicator];
 	} else {
 		recVideo = YES;
 		self.framebufferOnly = NO;
-		videoItemImg = videoItem.image;
-		videoItem.image = nil;
-		videoItem.view = [VideoRecordingView.alloc initWithItem:videoItem];
+		[self setupRecordingIndicator];
 	}
 }
+- (IBAction)resizeWindow:(NSMenuItem *)item {
+	if (self.inFullScreenMode) return;
+	NSSize size, vSize = self.frame.size;
+	sscanf(item.title.UTF8String, "%lf x %lf", &size.width, &size.height);
+	NSRect winFrm = self.window.frame;
+	winFrm.size.width += size.width - vSize.width;
+	winFrm.size.height += size.height - vSize.height;
+	winFrm.origin.x -= (size.width - vSize.width) / 2.;
+	winFrm.origin.y -= size.height - vSize.height;
+	[self.window setFrame:winFrm display:YES animate:YES];
+}
 - (IBAction)fullscreen:(id)sender {	// for Tool bar button
+	if (recVideo) [self resignRecordingIndicator];
 	[self enterFullScreenMode:self.window.screen withOptions:
 		@{NSFullScreenModeAllScreens:@NO}];
 	[NSCursor setHiddenUntilMouseMoves:YES];
+	self.menu = fullScrMenu;
 	[self showFullScrMessage];
+	if (recVideo) [self setupRecordingIndicator];
 }
 - (IBAction)toggleFullScreen:(id)sender { // for Menu bar menu item
 	if (self.inFullScreenMode) [self stopFullScreen];
@@ -420,7 +512,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 		[alternator invalidate]; alternator = nil;
 	}
 }
-- (IBAction)chooseEffectMyMenu:(NSMenuItem *)sender {
+- (IBAction)chooseEffectByMenu:(NSMenuItem *)sender {
 	[efctPopUp selectItemAtIndex:sender.tag];
 	[self chooseEffect:efctPopUp];
 }
@@ -442,13 +534,17 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 //
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem {
 	SEL action = menuItem.action;
-	if (action == @selector(chooseEffectMyMenu:))
+	if (action == @selector(chooseEffectByMenu:))
 		menuItem.state = (EFCT_TYPE & EFCT_MASK) == menuItem.tag;
 	else if (action == @selector(toggleAutoAltByMenu:))
 		menuItem.state = alternator != nil;
 	else if (action == @selector(toggleToolbarShown:))
 		menuItem.title = NSLocalizedString(
 			self.window.toolbar.visible? @"Hide Toolbar" : @"Show Toolbar", nil);
+	else if (action == @selector(recordVideo:))
+		menuItem.state = recVideo;
+	else if (action == @selector(resizeWindow:))
+		return !self.inFullScreenMode;
 	return YES;
 }
 @end

@@ -20,7 +20,7 @@ extern void err_msg(NSString *msg, BOOL fatal);
 	<NSApplicationDelegate, NSWindowDelegate>
 @end
 
-@class MediaShare;
+@class MediaShare, VideoRecordingView;
 @interface CrazyMirror : MTKView
 	<AVCaptureVideoDataOutputSampleBufferDelegate, NSMenuItemValidation> {
 	NSArray<AVCaptureDevice *> *cameras;
@@ -40,20 +40,23 @@ extern void err_msg(NSString *msg, BOOL fatal);
 	simd_float3 floatInfo;
 	BOOL isARM;
 //
-	IBOutlet NSToolbarItem *photoItem, *videoItem;
+	IBOutlet NSToolbarItem *photoItem, *videoItem, *autoItem;
 	IBOutlet NSPopUpButton *cameraPopUp, *efctPopUp;
 	IBOutlet NSSwitch *autoSwitch;
 	IBOutlet NSTextField *intervalDgt;
 	IBOutlet NSTextField *fullScrMsg;
-	NSTimer *alternator, *fullScrMsgTimer;
+	IBOutlet NSMenu *fullScrMenu;
+	NSTimer *alternator, *fullScrMsgTimer, *cursorHidingTimer;
+	CGFloat fullScrMsgClock;
 	NSSound *cameraShutterSnd;
 	BOOL takePhoto, recVideo;
 	NSImage *videoItemImg;
 	MediaShare *mediaShare;
+	VideoRecordingView *recIndicator;
 }
 - (IBAction)chooseEffect:(NSPopUpButton *)sender;
 - (IBAction)toggleAutoAlternate:(NSSwitch *)sender;
-- (IBAction)chooseEffectMyMenu:(NSMenuItem *)sender;
+- (IBAction)chooseEffectByMenu:(NSMenuItem *)sender;
 - (IBAction)toggleAutoAltByMenu:(NSMenuItem *)sender;
 @end
 

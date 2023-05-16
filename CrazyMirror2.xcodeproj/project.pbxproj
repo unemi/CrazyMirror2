@@ -24,6 +24,7 @@
 /* Begin PBXFileReference section */
 		2311B4C92A10EA8700272681 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MyNotification.xib; sourceTree = "<group>"; };
 		2311B4CC2A10EA9100272681 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MyNotification.strings; sourceTree = "<group>"; };
+		231A9DC62A13619100BBFD42 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		2328922E2A0C7F5000DFA7AF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		232892302A0C8FB700DFA7AF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		234F6E3B2A0682CC005FF303 /* VecTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VecTypes.h; sourceTree = "<group>"; };
@@ -62,6 +63,7 @@
 		235B18A52A05041A00F217BA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				231A9DC62A13619100BBFD42 /* VideoToolbox.framework */,
 				235B18A62A05041A00F217BA /* MetalKit.framework */,
 			);
 			name = Frameworks;
@@ -167,12 +169,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				23EBF0B92A0E135D00719D40 /* Localizable.strings in Resources */,
+				232892312A0C8FB700DFA7AF /* InfoPlist.strings in Resources */,
 				23B3A06E2A034E9E00EA96A5 /* Assets.xcassets in Resources */,
 				23B3A0712A034E9E00EA96A5 /* MainMenu.xib in Resources */,
-				23DDE04A2A0F4742006B1888 /* CameraShutter.mp3 in Resources */,
-				232892312A0C8FB700DFA7AF /* InfoPlist.strings in Resources */,
-				237ED9DF2A0CA84500626BAF /* Credits.rtf in Resources */,
 				2311B4C82A10EA8700272681 /* MyNotification.xib in Resources */,
+				23DDE04A2A0F4742006B1888 /* CameraShutter.mp3 in Resources */,
+				237ED9DF2A0CA84500626BAF /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,11 +361,10 @@
 				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Crazy-Mirror-2-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to capture source data of deformation.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
@@ -375,7 +376,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -390,11 +391,10 @@
 				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Crazy-Mirror-2-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to capture source data of deformation.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
@@ -406,7 +406,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

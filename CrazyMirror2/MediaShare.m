@@ -53,24 +53,24 @@ static NSURL *photos_URL(NSWorkspace *wkspc) {
 }
 @end
 static MyNotification *myNotification = nil;
-static void show_notification(NSString *message, NSWindow *parent) {
+static void show_notification(NSString *message, NSView *view) {
 	void (^block)(void) = ^{
 		if (myNotification == nil) myNotification = [MyNotification.alloc initWithWindow:nil];
 		[myNotification setMessage:message];
 		NSWindow *myWin = myNotification.window;
-		NSRect rect = parent.frame;
+		NSRect rect = view.window.frame;
 		NSSize size = myWin.frame.size;
 		NSPoint origin = {rect.origin.x + (rect.size.width - size.width) / 2.,
 			rect.origin.y + (rect.size.height - size.height) / 2. };
 		[myWin setFrameOrigin:origin];
-		myWin.level = parent.level + 1;
+		myWin.level = view.window.level + 1;
 		[myWin makeKeyAndOrderFront:nil];
 	};
 	if (NSThread.isMainThread) block();
 	else dispatch_async(dispatch_get_main_queue(), block);
 }
 void share_as_photo(NSBitmapImageRep *imgRep,
-	NSInteger ID, NSWindow *parent, void (^handler)(void)) {
+	NSInteger ID, NSView *view, void (^handler)(void)) {
 	[PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
 		NSURL *fileURL = [NSURL fileURLWithPath:
 			[NSString stringWithFormat:@"CrazyMirror2Photo_%05ld.HEIC", ID]];
@@ -88,13 +88,17 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 		MyWarning(success, @"Photo %@", error.localizedDescription)
 		else {
 			handler();
-			show_notification(@"Took a photo.", parent);
+			show_notification(@"Took a photo.", view);
 		}
 	}];
 }
 
+#ifdef DEBUG_I
+static FILE *logFD = NULL;
+#endif
+
 @interface MediaShare () {
-	NSWindow *parentWindow;
+	NSView *view;
 	NSURL *URL;
 	AVAssetWriter *writer;
 	struct timeval startTime;
@@ -105,6 +109,7 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 
 @implementation MediaShare
 - (void)thread:(NSBitmapImageRep *)imgRep {
+	MyLog("Thread start\n");
 	NSFileManager *fmn = NSFileManager.defaultManager;
 	@try {
 		while (URL == nil) {
@@ -127,11 +132,17 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 		[writer addInput:imageInput];
 		if (![writer startWriting]) @throw error;
 		[writer startSessionAtSourceTime:kCMTimeZero];
+	MyLog("Loop start\n");
 		while (imageInput.readyForMoreMediaData) {
 			[queLock lockWhenCondition:YES];
-			NSArray *task = frameQue[0];
-			[frameQue removeObjectAtIndex:0];
-			[queLock unlockWithCondition:frameQue.count > 0];
+			NSArray *task = nil; BOOL cond = NO;
+			if (frameQue != nil && frameQue.count > 0) {
+				task = frameQue[0];
+				[frameQue removeObjectAtIndex:0];
+				cond = frameQue.count > 0;
+			}
+			[queLock unlockWithCondition:cond];
+			if (task == nil) break;
 			NSBitmapImageRep *imgRep = task[0];
 			CMTimeValue playTime = [task[1] integerValue];
 			CVPixelBufferRef pixBuffer;
@@ -144,6 +155,7 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 			CFRelease(pixBuffer);
 			if (!result) @throw @"Cannot append a frame image.";
 		}
+	MyLog("Loop end\n");
 	} @catch (NSString *msg) {
 		err_msg(msg, NO);
 	} @catch (NSError *error) {
@@ -152,12 +164,20 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 	[queLock lock];
 	frameQue = nil;
 	[queLock unlock];
+	MyLog("Thread end\n");
 }
 - (instancetype)initWithImgRep:(NSBitmapImageRep *)imgRep
-	ID:(NSInteger)ID parent:(NSWindow *)pwin {
+	ID:(NSInteger)ID view:(NSView *)v {
 	if (!(self = [super init])) return nil;
+#ifdef DEBUG_I
+	if (logFD == NULL) {
+		logFD = fopen("tmp/CrazzyMirror2.log", "w");
+		MyAssert(logFD, @"Couldn't make logfile (%d).", errno)
+	}
+	MyLog("MediaShare was initialized.\n")
+#endif
 	_ID = ID;
-	parentWindow = pwin;
+	view = v;
 	frameQue = NSMutableArray.new;
 	queLock = NSConditionLock.new;
 	[NSThread detachNewThreadSelector:@selector(thread:) toTarget:self withObject:imgRep];
@@ -181,9 +201,14 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 	return YES;
 }
 - (void)finishWithHandler:(void (^)(void))handler {
+	MyLog("Finalization start\n");
+	[queLock lock];
+	frameQue = nil;
+	[queLock unlockWithCondition:YES];
 	[writer endSessionAtSourceTime:(CMTime){self.playTime, TIME_SCALE, 1, 0}];
 	NSURL *videoFileURL = URL;
 	[writer finishWritingWithCompletionHandler:^{
+	MyLog("Finalization completed\n");
 		[PHPhotoLibrary.sharedPhotoLibrary performChanges:^{
 			PHAssetResourceCreationOptions *option = PHAssetResourceCreationOptions.new;
 			option.shouldMoveFile = YES;
@@ -193,10 +218,11 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 			MyWarning(success, @"%@", error)
 			else {
 				handler();
-				show_notification(@"Record a video.", self->parentWindow);
+				show_notification(@"Record a video.", self->view);
 			}
 		}];
 	}];
+	MyLog("Finalization submitted\n");
 }
 @end
 
@@ -205,23 +231,25 @@ void share_as_photo(NSBitmapImageRep *imgRep,
 	if (!(self = [super initWithFrame:(NSRect){0,0,20,20}])) return nil;
 	action = item.action;
 	target = item.target;
+	return self;
+}
+- (void)startAnimation {
 	timer = [NSTimer scheduledTimerWithTimeInterval:1./30.
 		repeats:YES block:^(NSTimer * _Nonnull timer) {
 		if ((self->cycleTime += 1./45.) > 1.) self->cycleTime --;
 		self.needsDisplay = YES;
 	}];
-	return self;
 }
+- (void)stopAnimation { [timer invalidate]; }
 - (void)drawRect:(NSRect)rect {
 	[NSColor.clearColor setFill];
 	[NSBezierPath fillRect:self.bounds];
 	[[NSColor colorWithRed:1. green:0. blue:0.
-		alpha:(sin(cycleTime * M_PI * 2.) + 1.) / 2.] setFill];
+		alpha:(sin(cycleTime * M_PI * 2.) + 1.) / 2. * .8 + .2] setFill];
 	NSRect rct = self.bounds;
 	CGFloat d = rct.size.height / 4.;
 	[[NSBezierPath bezierPathWithOvalInRect:NSInsetRect(rct, d, d)] fill];
 }
-- (void)stopAnimation { [timer invalidate]; }
 - (void)mouseDown:(NSEvent *)event {
 	[self sendAction:action to:target];
 }
