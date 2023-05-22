@@ -11,6 +11,7 @@
 		232892312A0C8FB700DFA7AF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2328922F2A0C8FB700DFA7AF /* InfoPlist.strings */; };
 		234F6E3D2A068454005FF303 /* MyShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 234F6E3C2A068454005FF303 /* MyShaders.metal */; };
 		235B18A72A05041A00F217BA /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 235B18A62A05041A00F217BA /* MetalKit.framework */; };
+		2360AA842A1B30D9001AE929 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2360AA862A1B30D9001AE929 /* Preferences.xib */; };
 		237ED9DF2A0CA84500626BAF /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 237ED9E12A0CA84500626BAF /* Credits.rtf */; };
 		23B3A06C2A034E9D00EA96A5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23B3A06B2A034E9D00EA96A5 /* AppDelegate.m */; };
 		23B3A06E2A034E9E00EA96A5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23B3A06D2A034E9E00EA96A5 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 		23DDE04A2A0F4742006B1888 /* CameraShutter.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 23DDE0492A0F4742006B1888 /* CameraShutter.mp3 */; };
 		23DDE04D2A0FAEC5006B1888 /* MediaShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 23DDE04C2A0FAEC5006B1888 /* MediaShare.m */; };
 		23EBF0B92A0E135D00719D40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 23EBF0BB2A0E135D00719D40 /* Localizable.strings */; };
+		23F975C72A1A062A00673D2D /* Preferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F975C62A1A062A00673D2D /* Preferences.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		234F6E3B2A0682CC005FF303 /* VecTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VecTypes.h; sourceTree = "<group>"; };
 		234F6E3C2A068454005FF303 /* MyShaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MyShaders.metal; sourceTree = "<group>"; };
 		235B18A62A05041A00F217BA /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		2360AA852A1B30D9001AE929 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Preferences.xib; sourceTree = "<group>"; };
+		2360AA882A1B30E5001AE929 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Preferences.strings; sourceTree = "<group>"; };
 		237ED9E02A0CA84500626BAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Base; path = Base.lproj/Credits.rtf; sourceTree = "<group>"; };
 		237ED9E22A0CA84C00626BAF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = ja; path = ja.lproj/Credits.rtf; sourceTree = "<group>"; };
 		23B3A0672A034E9D00EA96A5 /* Crazy Mirror 2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Crazy Mirror 2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +50,9 @@
 		23EBF0BC2A0E13B000719D40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		23F49FEA2A0CD8C8003386D8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		23F49FF52A0CF002003386D8 /* Web */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Web; sourceTree = "<group>"; };
+		23F975C52A1A062A00673D2D /* Preferences.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Preferences.h; sourceTree = "<group>"; };
+		23F975C62A1A062A00673D2D /* Preferences.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Preferences.m; sourceTree = "<group>"; };
+		23F975C82A1A08F100673D2D /* Crazy-Mirror-2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Crazy-Mirror-2-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +79,7 @@
 		23B3A05E2A034E9D00EA96A5 = {
 			isa = PBXGroup;
 			children = (
+				23F975C82A1A08F100673D2D /* Crazy-Mirror-2-Info.plist */,
 				23F49FEA2A0CD8C8003386D8 /* README.md */,
 				23F49FF52A0CF002003386D8 /* Web */,
 				23B3A0692A034E9D00EA96A5 /* CrazyMirror2 */,
@@ -93,6 +101,8 @@
 			children = (
 				23B3A06A2A034E9D00EA96A5 /* AppDelegate.h */,
 				23B3A06B2A034E9D00EA96A5 /* AppDelegate.m */,
+				23F975C52A1A062A00673D2D /* Preferences.h */,
+				23F975C62A1A062A00673D2D /* Preferences.m */,
 				23DDE04B2A0FAEC5006B1888 /* MediaShare.h */,
 				23DDE04C2A0FAEC5006B1888 /* MediaShare.m */,
 				234F6E3B2A0682CC005FF303 /* VecTypes.h */,
@@ -101,6 +111,7 @@
 				23B3A06D2A034E9E00EA96A5 /* Assets.xcassets */,
 				23B3A06F2A034E9E00EA96A5 /* MainMenu.xib */,
 				2311B4CA2A10EA8700272681 /* MyNotification.xib */,
+				2360AA862A1B30D9001AE929 /* Preferences.xib */,
 				2328922F2A0C8FB700DFA7AF /* InfoPlist.strings */,
 				23EBF0BB2A0E135D00719D40 /* Localizable.strings */,
 				23B3A0722A034E9E00EA96A5 /* main.m */,
@@ -170,6 +181,7 @@
 			files = (
 				23EBF0B92A0E135D00719D40 /* Localizable.strings in Resources */,
 				232892312A0C8FB700DFA7AF /* InfoPlist.strings in Resources */,
+				2360AA842A1B30D9001AE929 /* Preferences.xib in Resources */,
 				23B3A06E2A034E9E00EA96A5 /* Assets.xcassets in Resources */,
 				23B3A0712A034E9E00EA96A5 /* MainMenu.xib in Resources */,
 				2311B4C82A10EA8700272681 /* MyNotification.xib in Resources */,
@@ -189,6 +201,7 @@
 				23B3A0732A034E9E00EA96A5 /* main.m in Sources */,
 				23DDE04D2A0FAEC5006B1888 /* MediaShare.m in Sources */,
 				23B3A06C2A034E9D00EA96A5 /* AppDelegate.m in Sources */,
+				23F975C72A1A062A00673D2D /* Preferences.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +223,15 @@
 				232892302A0C8FB700DFA7AF /* ja */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2360AA862A1B30D9001AE929 /* Preferences.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2360AA852A1B30D9001AE929 /* Base */,
+				2360AA882A1B30E5001AE929 /* ja */,
+			);
+			name = Preferences.xib;
 			sourceTree = "<group>";
 		};
 		237ED9E12A0CA84500626BAF /* Credits.rtf */ = {
@@ -361,12 +383,14 @@
 				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Crazy-Mirror-2-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to capture source data of deformation.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Taken photo and recorded video is saved in folder you chosen.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Taken photo and recoded video is stored in Photo library.";
@@ -376,7 +400,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -391,12 +415,14 @@
 				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Crazy-Mirror-2-Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.kids-games";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to capture source data of deformation.";
+				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Taken photo and recorded video is saved in folder you chosen.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Taken photo and recoded video is stored in Photo library.";
@@ -406,7 +432,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

@@ -7,6 +7,7 @@
 
 #import "AppDelegate.h"
 #import "MediaShare.h"
+#import "Preferences.h"
 #include <sys/time.h>
 #include <sys/sysctl.h>
 
@@ -18,16 +19,24 @@ static unsigned long current_time_ms(void) {
 	if (startSec == 0) startSec = tm.tv_sec;
 	return (tm.tv_sec - startSec) * 1000 + tm.tv_usec / 1000;
 }
-void err_msg(NSString *msg, BOOL fatal) {
-	void (^block)(void) = ^{
-		NSAlert *alt = NSAlert.new;
-		alt.alertStyle = NSAlertStyleCritical;
-		alt.messageText = msg;
-		[alt runModal];
-		if (fatal) [NSApp terminate:nil];
-	};
+void in_main_thread(void (^block)(void)) {
 	if (NSThread.isMainThread) block();
 	else dispatch_async(dispatch_get_main_queue(), block);
+}
+void err_msg(NSObject *object, BOOL fatal) {
+	in_main_thread(^{
+		NSAlert *alt;
+		if ([object isKindOfClass:NSError.class])
+			alt = [NSAlert alertWithError:(NSError *)object];
+		else {
+			alt = NSAlert.new;
+			alt.alertStyle = NSAlertStyleCritical;
+			alt.messageText = [object isKindOfClass:NSString.class]?
+				NSLocalizedString((NSString *)object, nil) : object.description;
+		}
+		[alt runModal];
+		if (fatal) [NSApp terminate:nil];
+	});
 }
 static BOOL check_hw_arch(void) {
 	int mib[2] = { CTL_HW, HW_MACHINE };
@@ -49,7 +58,6 @@ struct {
 	{@"shavazzz", ArgLRndMask},
 	{@"hahehohu", ArgAvrgMask | ArgBlurMask | ArgDifsMask}
 };
-static NSString *keyPhotoCount = @"PhotoCount", *keyVideoCount = @"VideoCount";
 
 @implementation NSMenu (MyExtension)
 - (void)addItemWithToolbarItem:(NSToolbarItem *)tbItem {
@@ -113,6 +121,9 @@ static NSString *keyPhotoCount = @"PhotoCount", *keyVideoCount = @"VideoCount";
 	[super awakeFromNib];
 	isARM = check_hw_arch();
 	frmsBufLock = NSLock.new;
+	preferences = PreferenceData.new;
+	if (preferences.startFullScr) [NSTimer scheduledTimerWithTimeInterval:.5
+		target:self selector:@selector(fullscreen:) userInfo:nil repeats:NO];
 	intervalDgt.doubleValue = AUTO_INTERVAL;
 //
 //	Initialize capture session by default camera
@@ -352,17 +363,13 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 				@"camera.fill" accessibilityDescription:nil];
 			if (cameraShutterSnd == nil) cameraShutterSnd = [NSSound soundNamed:@"CameraShutter"];
 			[cameraShutterSnd play];
-			NSInteger photoCount = [NSUserDefaults.standardUserDefaults integerForKey:keyPhotoCount];
-			share_as_photo(imgRep, photoCount, self, ^{
-				self->photoItem.image = orgImg;
-				[NSUserDefaults.standardUserDefaults
-					setInteger:photoCount + 1 forKey:keyPhotoCount];});
+			save_photo_image(imgRep, self, ^{ self->photoItem.image = orgImg; });
 			takePhoto = NO;
 			if (!recVideo) self.framebufferOnly = YES;
 		}
 		if (recVideo) {
-			if (mediaShare == nil) mediaShare = [MediaShare.alloc initWithImgRep:imgRep
-				ID:[NSUserDefaults.standardUserDefaults integerForKey:keyVideoCount] view:self];
+			if (mediaShare == nil)
+				mediaShare = [MediaShare.alloc initWithImgRep:imgRep view:self];
 			if (![mediaShare addFrameImgRep:imgRep]) [self stopVideoRecording];
 		}
 	}
@@ -450,10 +457,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 }
 - (IBAction)recordVideo:(id)sender {
 	if (recVideo) {
-		NSInteger ID = mediaShare.ID;
-		[mediaShare finishWithHandler:^{
-			[NSUserDefaults.standardUserDefaults setInteger:ID + 1 forKey:keyVideoCount];
-		}];
+		[mediaShare finishWithHandler:^{ [preferences incVideoCount]; }];
 		[self stopVideoRecording];
 		[self resignRecordingIndicator];
 	} else {
@@ -549,6 +553,10 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 }
 @end
 
+@interface AppDelegate () {
+	Preferences *pref;
+}
+@end
 @implementation AppDelegate
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	clear_useless_video_files();
@@ -560,5 +568,9 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 }
 - (void)windowWillClose:(NSNotification *)notification {
 	[NSApp terminate:nil];
+}
+- (IBAction)openPreferences:(id)sender {
+	if (pref == nil) pref = [Preferences.alloc initWithWindow:nil];
+	[pref.window makeKeyAndOrderFront:nil];
 }
 @end

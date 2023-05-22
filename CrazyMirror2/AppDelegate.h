@@ -14,7 +14,8 @@
 // interval of auto-alternation of effects in second.
 #define AUTO_INTERVAL 10.
 
-extern void err_msg(NSString *msg, BOOL fatal);
+extern void in_main_thread(void (^block)(void));
+extern void err_msg(NSObject *object, BOOL fatal);
 
 @interface AppDelegate : NSObject
 	<NSApplicationDelegate, NSWindowDelegate>

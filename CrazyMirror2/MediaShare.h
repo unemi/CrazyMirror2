@@ -13,13 +13,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern void clear_useless_video_files(void);
-extern void share_as_photo(NSBitmapImageRep *imgRep,
-	NSInteger ID, NSView *view, void (^handler)(void));
+extern void save_photo_image(NSBitmapImageRep *imgRep, NSView *view, void (^handler)(void));
 
 @interface MediaShare : NSObject
-@property (readonly) NSInteger ID;
-- (instancetype)initWithImgRep:(NSBitmapImageRep *)imgRep
-	ID:(NSInteger)ID view:(NSView *)v;
+- (instancetype)initWithImgRep:(NSBitmapImageRep *)imgRep view:(NSView *)v;
 - (BOOL)addFrameImgRep:(NSBitmapImageRep *)imgRep;
 - (void)finishWithHandler:(void (^)(void))handler;
 @end
@@ -44,9 +41,7 @@ extern void share_as_photo(NSBitmapImageRep *imgRep,
 @end
 
 //#define DEBUG_I
-#ifdef DEBUG_I
-#define MyLog(...) fprintf(logFD,__VA_ARGS__); fflush(logFD);
-#else
+#ifndef DEBUG_I
 #define MyLog(...)
 #endif
 
