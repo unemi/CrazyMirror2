@@ -117,14 +117,22 @@ struct {
 	cursorHidingTimer = [NSTimer scheduledTimerWithTimeInterval:.5 repeats:NO block:
 		^(NSTimer * _Nonnull timer) { [NSCursor setHiddenUntilMouseMoves:YES];}];
 }
+- (void)intervalDidChange {
+	if (alternator != nil) {
+		[alternator invalidate];
+		alternator = [NSTimer scheduledTimerWithTimeInterval:preferences.interval
+			target:self selector:@selector(alternateEffect:)
+			userInfo:nil repeats:YES];
+	}
+}
 - (void)awakeFromNib {
 	[super awakeFromNib];
 	isARM = check_hw_arch();
 	frmsBufLock = NSLock.new;
 	preferences = PreferenceData.new;
+	autoSwitch.state = preferences.startAuto;
 	if (preferences.startFullScr) [NSTimer scheduledTimerWithTimeInterval:.5
 		target:self selector:@selector(fullscreen:) userInfo:nil repeats:NO];
-	intervalDgt.doubleValue = AUTO_INTERVAL;
 //
 //	Initialize capture session by default camera
 	ses = AVCaptureSession.new;
@@ -160,28 +168,10 @@ struct {
 	colAttDesc.pixelFormat = self.colorPixelFormat;
 	commandQueue = self.device.newCommandQueue;
 //
-	NSMenuItem *item = [fullScrMenu itemAtIndex:0];
-	[fullScrMenu removeItemAtIndex:0];
-	[fullScrMenu addItemWithToolbarItem:photoItem];
-	[fullScrMenu addItemWithToolbarItem:videoItem];
-	[fullScrMenu addItem:NSMenuItem.separatorItem];
-	NSMenu *srcMenu = efctPopUp.menu;
-	for (NSInteger i = 0; i < srcMenu.numberOfItems; i ++) {
-		NSMenuItem *newItem = [fullScrMenu addItemWithTitle:[srcMenu itemAtIndex:i].title
-			action:@selector(chooseEffectByMenu:) keyEquivalent:@""];
-		newItem.tag = i;
-		newItem.target = self;
-	}
-	[fullScrMenu addItem:NSMenuItem.separatorItem];
-	NSMenuItem *aItem = [fullScrMenu addItemWithTitle:autoItem.label
-		action:@selector(toggleAutoAltByMenu:) keyEquivalent:@""];
-	aItem.target = self;
-	[fullScrMenu addItem:NSMenuItem.separatorItem];
-	[fullScrMenu addItem:item];
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(checkHidingCursor:) name:NSMenuDidEndTrackingNotification object:fullScrMenu];
-//
 	[self chooseEffect:efctPopUp];
 	[self toggleAutoAlternate:autoSwitch];
+	[NSNotificationCenter.defaultCenter addObserver:self
+		selector:@selector(intervalDidChange) name:noteIntervalChanged object:nil];
 //
 	NSSize sz = self.frame.size;
 	if (sz.height != sz.width * 9. / 16.) {
@@ -375,6 +365,30 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	}
 }
 //
+- (void)setupFullScrMenu {
+	if (fullScrMenu.numberOfItems > 1) return;
+	NSMenuItem *item = [fullScrMenu itemAtIndex:0];
+	[fullScrMenu removeItemAtIndex:0];
+	[fullScrMenu addItemWithToolbarItem:photoItem];
+	[fullScrMenu addItemWithToolbarItem:videoItem];
+	[fullScrMenu addItem:NSMenuItem.separatorItem];
+	NSMenu *srcMenu = efctPopUp.menu;
+	for (NSInteger i = 0; i < srcMenu.numberOfItems; i ++) {
+		NSMenuItem *newItem = [fullScrMenu addItemWithTitle:[srcMenu itemAtIndex:i].title
+			action:@selector(chooseEffectByMenu:) keyEquivalent:@""];
+		newItem.tag = i;
+		newItem.target = self;
+	}
+	[fullScrMenu addItem:NSMenuItem.separatorItem];
+	NSMenuItem *aItem = [fullScrMenu addItemWithTitle:autoItem.label
+		action:@selector(toggleAutoAltByMenu:) keyEquivalent:@""];
+	aItem.target = self;
+	aItem.image = [NSImage imageWithSystemSymbolName:
+		@"arrow.triangle.2.circlepath" accessibilityDescription:nil];
+	[fullScrMenu addItem:NSMenuItem.separatorItem];
+	[fullScrMenu addItem:item];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(checkHidingCursor:) name:NSMenuDidEndTrackingNotification object:fullScrMenu];
+}
 - (void)showFullScrMessage {
 	if (fullScrMsgTimer.isValid) [fullScrMsgTimer invalidate];
 	else {
@@ -482,6 +496,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	[self enterFullScreenMode:self.window.screen withOptions:
 		@{NSFullScreenModeAllScreens:@NO}];
 	[NSCursor setHiddenUntilMouseMoves:YES];
+	[self setupFullScrMenu];
 	self.menu = fullScrMenu;
 	[self showFullScrMessage];
 	if (recVideo) [self setupRecordingIndicator];
@@ -509,7 +524,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 - (IBAction)toggleAutoAlternate:(NSSwitch *)sender {
 	if (sender.state) {
 		if (alternator == nil) alternator =
-			[NSTimer scheduledTimerWithTimeInterval:intervalDgt.doubleValue
+			[NSTimer scheduledTimerWithTimeInterval:preferences.interval
 				target:self selector:@selector(alternateEffect:)
 				userInfo:nil repeats:YES];
 	} else if (alternator != nil) {
@@ -522,15 +537,6 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 }
 - (IBAction)toggleAutoAltByMenu:(NSMenuItem *)sender {
 	[autoSwitch performClick:nil];
-}
-- (IBAction)changeInteral:(NSTextField *)sender {
-	CGFloat newValue = sender.doubleValue;
-	if (alternator != nil) {
-		[alternator invalidate];
-		alternator = [NSTimer scheduledTimerWithTimeInterval:newValue
-			target:self selector:@selector(alternateEffect:)
-			userInfo:nil repeats:YES];
-	}
 }
 - (IBAction)toggleToolbarShown:(id)sender {
 	[self.window toggleToolbarShown:sender];

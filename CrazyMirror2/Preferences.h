@@ -22,11 +22,16 @@ typedef enum {
 	SvVidInUserFolder
 } SaveModeForVideo;
 
+extern NSString *noteIntervalChanged;
+extern NSURL *photos_URL(NSWorkspace *wkspc);
+extern NSImage *photos_app_icon(void);
+
 @interface PreferenceData : NSObject
 @property NSInteger photoCount, videoCount;
 @property SaveModeForPhoto svPhoto;
 @property SaveModeForVideo svVideo;
-@property BOOL startFullScr;
+@property BOOL startFullScr, startAuto;
+@property CGFloat interval;
 - (void)incPhotoCount;
 - (void)incVideoCount;
 @end

@@ -88,7 +88,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="cjJ-U9-x2y"/>
-                            <menuItem title="Auto" keyEquivalent="a" id="v9I-PF-OiY">
+                            <menuItem title="Auto" image="arrow.triangle.2.circlepath" catalog="system" keyEquivalent="a" id="v9I-PF-OiY">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="toggleAutoAltByMenu:" target="acQ-d4-Vt8" id="jdb-Bc-Wlg"/>
@@ -114,43 +114,43 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="hB3-LF-h0Y"/>
-                            <menuItem title="800 x 450" keyEquivalent="1" id="hXo-xL-b1Q">
+                            <menuItem title="800 x 450" image="macwindow" catalog="system" keyEquivalent="1" id="hXo-xL-b1Q">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                 <connections>
                                     <action selector="resizeWindow:" target="acQ-d4-Vt8" id="cSX-Qg-BAg"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="1024 x 576" keyEquivalent="2" id="xLF-Mw-aeK">
+                            <menuItem title="1024 x 576" image="macwindow" catalog="system" keyEquivalent="2" id="xLF-Mw-aeK">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                 <connections>
                                     <action selector="resizeWindow:" target="acQ-d4-Vt8" id="UDS-8Y-8uv"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="1280 x 720" keyEquivalent="3" id="eIf-iF-qgF">
+                            <menuItem title="1280 x 720" image="macwindow" catalog="system" keyEquivalent="3" id="eIf-iF-qgF">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                 <connections>
                                     <action selector="resizeWindow:" target="acQ-d4-Vt8" id="82G-KB-rHN"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="1600 x 900" keyEquivalent="4" id="ZTT-EK-I4W">
+                            <menuItem title="1600 x 900" image="macwindow" catalog="system" keyEquivalent="4" id="ZTT-EK-I4W">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                 <connections>
                                     <action selector="resizeWindow:" target="acQ-d4-Vt8" id="n8s-qU-jy3"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Enter Full Screen" keyEquivalent="f" id="4J7-dP-txa">
+                            <menuItem title="Enter Full Screen" image="arrow.up.left.and.arrow.down.right" catalog="system" keyEquivalent="f" id="4J7-dP-txa">
                                 <connections>
                                     <action selector="toggleFullScreen:" target="acQ-d4-Vt8" id="Ih6-LM-sW4"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="azX-I0-RV9"/>
-                            <menuItem title="Take Photo" keyEquivalent="p" id="E2e-XO-kGb">
+                            <menuItem title="Take Photo" image="camera" catalog="system" keyEquivalent="p" id="E2e-XO-kGb">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                 <connections>
                                     <action selector="takePhoto:" target="acQ-d4-Vt8" id="giR-Mq-Qgo"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Record Video" keyEquivalent="v" id="cas-rr-hz7">
+                            <menuItem title="Record Video" image="video" catalog="system" keyEquivalent="v" id="cas-rr-hz7">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                                 <connections>
                                     <action selector="recordVideo:" target="acQ-d4-Vt8" id="cFQ-qo-1md"/>
@@ -205,7 +205,6 @@
                             <outlet property="efctPopUp" destination="Nci-Kw-vwe" id="fc1-P7-FXL"/>
                             <outlet property="fullScrMenu" destination="XxJ-Uf-J7v" id="53R-wR-rDc"/>
                             <outlet property="fullScrMsg" destination="Udy-GI-KmB" id="HAz-Bu-cfK"/>
-                            <outlet property="intervalDgt" destination="FAj-rO-QdE" id="ZAw-04-4DM"/>
                             <outlet property="photoItem" destination="fVA-68-AUA" id="5gu-YK-hTF"/>
                             <outlet property="videoItem" destination="kHa-GJ-RW2" id="J84-l7-8Qh"/>
                         </connections>
@@ -281,47 +280,6 @@
                             </connections>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="9C0FBB39-CAC9-40C5-8D28-BC844F8841DB" explicitItemIdentifier="interval" label="Interval" paletteLabel="Interval" tag="-1" id="VG6-VM-Kvo">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="74" height="26"/>
-                        <size key="maxSize" width="74" height="26"/>
-                        <customView key="view" id="Ezj-N6-ijN">
-                            <rect key="frame" x="0.0" y="14" width="74" height="26"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <subviews>
-                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FAj-rO-QdE">
-                                    <rect key="frame" x="0.0" y="2" width="45" height="21"/>
-                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="999.9" drawsBackground="YES" id="xZk-tP-9BR">
-                                        <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" formatWidth="-1" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="AgO-xZ-4dI">
-                                            <real key="minimum" value="1"/>
-                                            <real key="maximum" value="999.89999999999998"/>
-                                        </numberFormatter>
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                    <connections>
-                                        <action selector="changeInteral:" target="acQ-d4-Vt8" id="5gY-iq-Zog"/>
-                                    </connections>
-                                </textField>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IG0-qF-UMq">
-                                    <rect key="frame" x="46" y="5" width="30" height="16"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" title="sec." id="A0a-xq-0q1">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
-                            </subviews>
-                            <constraints>
-                                <constraint firstItem="IG0-qF-UMq" firstAttribute="leading" secondItem="FAj-rO-QdE" secondAttribute="trailing" constant="3" id="118-XU-0J4"/>
-                                <constraint firstItem="FAj-rO-QdE" firstAttribute="leading" secondItem="Ezj-N6-ijN" secondAttribute="leading" id="BuU-fK-HKe"/>
-                                <constraint firstItem="IG0-qF-UMq" firstAttribute="firstBaseline" secondItem="FAj-rO-QdE" secondAttribute="firstBaseline" id="Cee-SI-IUN"/>
-                                <constraint firstAttribute="trailing" secondItem="IG0-qF-UMq" secondAttribute="trailing" id="pnY-4T-KyG"/>
-                                <constraint firstAttribute="bottom" secondItem="FAj-rO-QdE" secondAttribute="bottom" constant="2" id="urG-bx-pCv"/>
-                            </constraints>
-                        </customView>
-                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="48DC1328-DB91-4FCE-AF98-54D73E020FA0" label="Full screen" paletteLabel="Full screen" tag="-1" image="toolbarItem:5cb-Tz-MXU:image" bordered="YES" sizingBehavior="auto" id="5cb-Tz-MXU">
                         <connections>
                             <action selector="fullscreen:" target="acQ-d4-Vt8" id="57H-AV-jG5"/>
@@ -335,24 +293,25 @@
                     <toolbarItem reference="kHa-GJ-RW2"/>
                     <toolbarItem reference="bsP-Xe-90f"/>
                     <toolbarItem reference="RQu-CP-MWC"/>
-                    <toolbarItem reference="VG6-VM-Kvo"/>
                     <toolbarItem reference="5cb-Tz-MXU"/>
                 </defaultToolbarItems>
             </toolbar>
             <connections>
                 <outlet property="delegate" destination="Voe-Tx-rLC" id="DW9-nj-02G"/>
             </connections>
-            <point key="canvasLocation" x="190" y="742"/>
+            <point key="canvasLocation" x="202" y="921"/>
         </window>
         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.59999999999999998" id="Udy-GI-KmB">
-            <rect key="frame" x="0.0" y="0.0" width="824" height="60"/>
+            <rect key="frame" x="0.0" y="0.0" width="824" height="112"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <textFieldCell key="cell" title="Push [ESC] key to stop full screen mode." drawsBackground="YES" id="L2r-x3-dUL">
+            <textFieldCell key="cell" drawsBackground="YES" id="L2r-x3-dUL">
                 <font key="font" metaFont="system" size="48"/>
+                <string key="title">Push [ESC] key to stop full screen mode.
+Click with control key pops up a menu.</string>
                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
             </textFieldCell>
-            <point key="canvasLocation" x="90" y="319"/>
+            <point key="canvasLocation" x="90" y="345"/>
         </textField>
         <menu id="XxJ-Uf-J7v">
             <items>
@@ -368,7 +327,10 @@
     </objects>
     <resources>
         <image name="arrow.down.right.and.arrow.up.left" catalog="system" width="16" height="15"/>
+        <image name="arrow.triangle.2.circlepath" catalog="system" width="18" height="15"/>
+        <image name="arrow.up.left.and.arrow.down.right" catalog="system" width="16" height="15"/>
         <image name="camera" catalog="system" width="19" height="15"/>
+        <image name="macwindow" catalog="system" width="18" height="14"/>
         <image name="toolbarItem:5cb-Tz-MXU:image" width="16" height="15">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGBwpYJHZlcnNpb25ZJGFyY2hpdmVyVCR0b3BYJG9iamVjdHMSAAGGoF8QD05T
@@ -555,5 +517,6 @@ Aa8BsQGzAbUBvgHDAckB0QHTAdUB1wHZE3kTfhOLE44TmxOgE6gTqxPiE+cT7wAAAAAAAAIBAAAAAAAA
 AFAAAAAAAAAAAAAAAAAAABPyA
 </mutableData>
         </image>
+        <image name="video" catalog="system" width="19" height="13"/>
     </resources>
 </document>

@@ -13,7 +13,6 @@
 "4J7-dP-txa.title" = "がめんいっぱいにする";
 "5cb-Tz-MXU.label" = "がめんいっぱい";
 "5cb-Tz-MXU.paletteLabel" = "がめんいっぱい";
-"A0a-xq-0q1.title" = "びょう";
 "4Bx-Wd-UTU.title" = "こうか";
 "bsP-Xe-90f.label" = "こうか";
 "bsP-Xe-90f.paletteLabel" = "こうか";
@@ -33,8 +32,6 @@
 "v9I-PF-OiY.title" = "じどう";
 "RQu-CP-MWC.label" = "じどう";
 "RQu-CP-MWC.paletteLabel" = "じどう";
-"VG6-VM-Kvo.label" = "かんかく";
-"VG6-VM-Kvo.paletteLabel" = "かんかく";
 "Td7-aD-5lo.title" = "ういんどう";
 "Zv5-th-oRh.title" = "とじる";
 "OY7-WF-poV.title" = "ちいさくする";
@@ -42,5 +39,5 @@
 "1UK-8n-QPP.title" = "ツールバーをカスタマイズ…";
 "E2e-XO-kGb.title" = "しゃしんをとる";
 "cas-rr-hz7.title" = "びでおをとる";
-"L2r-x3-dUL.title" = "[ESC]きー を おすともどるよ。";
+"L2r-x3-dUL.title" = "[ESC]きー を おすともどるよ。\nControlキー+クリックでメニューもでるよ。";
 "sKA-NS-kYa.title" = "がめんいっぱいをやめる";

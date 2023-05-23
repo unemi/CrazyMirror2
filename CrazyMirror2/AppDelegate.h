@@ -11,8 +11,6 @@
 @import simd;
 
 #import "VecTypes.h"
-// interval of auto-alternation of effects in second.
-#define AUTO_INTERVAL 10.
 
 extern void in_main_thread(void (^block)(void));
 extern void err_msg(NSObject *object, BOOL fatal);
@@ -44,7 +42,6 @@ extern void err_msg(NSObject *object, BOOL fatal);
 	IBOutlet NSToolbarItem *photoItem, *videoItem, *autoItem;
 	IBOutlet NSPopUpButton *cameraPopUp, *efctPopUp;
 	IBOutlet NSSwitch *autoSwitch;
-	IBOutlet NSTextField *intervalDgt;
 	IBOutlet NSTextField *fullScrMsg;
 	IBOutlet NSMenu *fullScrMenu;
 	NSTimer *alternator, *fullScrMsgTimer, *cursorHidingTimer;

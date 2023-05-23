@@ -23,13 +23,9 @@ void clear_useless_video_files(void) {
 - (void)setMessage:(NSString *)msg {
 	message = NSLocalizedString(msg, nil);
 }
-static NSURL *photos_URL(NSWorkspace *wkspc) {
-	return [wkspc URLForApplicationWithBundleIdentifier:@"com.apple.Photos"];
-}
 - (void)windowDidLoad {
 	msgTxt.stringValue = message;
-	NSWorkspace *wkspc = NSWorkspace.sharedWorkspace;
-	openPhotosBtn.image = [wkspc iconForFile:photos_URL(wkspc).path];
+	openPhotosBtn.image = photos_app_icon();
 }
 - (IBAction)ok:(id)sender {
 	[timer invalidate];
