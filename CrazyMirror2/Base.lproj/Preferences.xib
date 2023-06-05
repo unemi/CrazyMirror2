@@ -8,7 +8,10 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="Preferences">
             <connections>
+                <outlet property="audioSrcPopUp" destination="MB6-Jr-Ckd" id="Ibf-ir-XYP"/>
                 <outlet property="intervalDgt" destination="oWt-3D-w5C" id="Brc-sf-Nsh"/>
+                <outlet property="portraitCBox" destination="idh-xa-eVp" id="2SK-54-bxC"/>
+                <outlet property="recAudioCBox" destination="eoZ-Zp-Afo" id="hxb-se-stt"/>
                 <outlet property="startAutoCBox" destination="aqL-sC-55h" id="1Db-9k-flP"/>
                 <outlet property="startFullScrCBox" destination="rad-bV-V3H" id="Xkr-mM-bhe"/>
                 <outlet property="svPhotoPopUp" destination="imk-6o-rc4" id="XSF-Qh-mH9"/>
@@ -21,14 +24,14 @@
         <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="disallowed" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenNone="YES" fullScreenDisallowsTiling="YES"/>
-            <rect key="contentRect" x="796" y="467" width="342" height="163"/>
+            <rect key="contentRect" x="796" y="467" width="342" height="246"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1055"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="342" height="163"/>
+                <rect key="frame" x="0.0" y="0.0" width="342" height="217"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="imk-6o-rc4">
-                        <rect key="frame" x="124" y="119" width="202" height="25"/>
+                        <rect key="frame" x="124" y="173" width="202" height="25"/>
                         <popUpButtonCell key="cell" type="push" title="Save in Photos library" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ZYp-hc-IUC" id="pYs-Qp-hS8">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
@@ -46,7 +49,7 @@
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A00-R7-yCA">
-                        <rect key="frame" x="124" y="89" width="194" height="25"/>
+                        <rect key="frame" x="124" y="143" width="194" height="25"/>
                         <popUpButtonCell key="cell" type="push" title="Save in Photos library" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4Mq-FB-Gie" id="lII-Yh-Gnw">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
@@ -63,7 +66,7 @@
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Fy-ps-ztM">
-                        <rect key="frame" x="18" y="126" width="103" height="16"/>
+                        <rect key="frame" x="18" y="180" width="103" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Captured photo:" id="OE5-db-TDL">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -71,7 +74,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Izk-HZ-C4L">
-                        <rect key="frame" x="18" y="96" width="103" height="16"/>
+                        <rect key="frame" x="18" y="150" width="103" height="16"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Recorded video:" id="tqV-uI-RKQ">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -79,7 +82,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="rad-bV-V3H">
-                        <rect key="frame" x="18" y="68" width="249" height="18"/>
+                        <rect key="frame" x="18" y="70" width="249" height="18"/>
                         <buttonCell key="cell" type="check" title="Start with full screen mode next time" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Gcw-jO-0Xj">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -89,7 +92,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aqL-sC-55h">
-                        <rect key="frame" x="18" y="46" width="246" height="18"/>
+                        <rect key="frame" x="18" y="48" width="246" height="18"/>
                         <buttonCell key="cell" type="check" title="Start with automatic mode next time" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Cjm-nh-zyx">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
@@ -132,39 +135,84 @@
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="idh-xa-eVp">
+                        <rect key="frame" x="18" y="92" width="109" height="18"/>
+                        <buttonCell key="cell" type="check" title="Portrait mode" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="gha-s3-zxj">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="switchPortraitMode:" target="-2" id="kpB-8p-9Qy"/>
+                        </connections>
+                    </button>
+                    <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="MB6-Jr-Ckd">
+                        <rect key="frame" x="150" y="113" width="78" height="25"/>
+                        <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="iRb-bQ-GKL" id="PaD-wn-w7e">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="menu"/>
+                            <menu key="menu" id="J95-u6-BdN">
+                                <items>
+                                    <menuItem title="Item 1" state="on" id="iRb-bQ-GKL"/>
+                                    <menuItem title="Item 2" id="ufc-lj-G20"/>
+                                    <menuItem title="Item 3" id="hFK-AS-ZCe"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <action selector="chooseAudioSrc:" target="-2" id="e3R-b6-LEr"/>
+                        </connections>
+                    </popUpButton>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eoZ-Zp-Afo">
+                        <rect key="frame" x="18" y="119" width="127" height="18"/>
+                        <buttonCell key="cell" type="check" title="With audio from:" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="v1w-Vl-Txp">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="switchRecAudio:" target="-2" id="HPJ-CV-n8K"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="oWt-3D-w5C" firstAttribute="firstBaseline" secondItem="glz-Ut-eOg" secondAttribute="firstBaseline" id="2J5-jd-dKE"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="glz-Ut-eOg" secondAttribute="trailing" constant="20" symbolic="YES" id="3Ms-A3-nSw"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="aqL-sC-55h" secondAttribute="trailing" constant="20" symbolic="YES" id="3Zm-ui-kEL"/>
                     <constraint firstItem="imk-6o-rc4" firstAttribute="leading" secondItem="5Fy-ps-ztM" secondAttribute="trailing" constant="8" symbolic="YES" id="73s-OU-mSv"/>
+                    <constraint firstItem="MB6-Jr-Ckd" firstAttribute="top" secondItem="A00-R7-yCA" secondAttribute="bottom" constant="10" symbolic="YES" id="7FF-7x-3z8"/>
                     <constraint firstItem="rad-bV-V3H" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="BWH-RB-GE7"/>
                     <constraint firstItem="imk-6o-rc4" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="Bp0-Mv-lLY"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="A00-R7-yCA" secondAttribute="trailing" constant="20" symbolic="YES" id="DPA-ea-o7P"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MB6-Jr-Ckd" secondAttribute="trailing" constant="20" symbolic="YES" id="F13-Hl-5CN"/>
                     <constraint firstItem="A00-R7-yCA" firstAttribute="firstBaseline" secondItem="Izk-HZ-C4L" secondAttribute="firstBaseline" id="GA5-Ko-fDZ"/>
                     <constraint firstItem="Izk-HZ-C4L" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="KZN-Vg-wyz"/>
                     <constraint firstItem="imk-6o-rc4" firstAttribute="firstBaseline" secondItem="5Fy-ps-ztM" secondAttribute="firstBaseline" id="Nse-TZ-a8L"/>
-                    <constraint firstItem="6cx-Hr-Aa2" firstAttribute="top" secondItem="aqL-sC-55h" secondAttribute="bottom" constant="8" symbolic="YES" id="QPe-n5-5dB"/>
+                    <constraint firstItem="idh-xa-eVp" firstAttribute="top" secondItem="MB6-Jr-Ckd" secondAttribute="bottom" constant="8" symbolic="YES" id="OLL-qS-Pcb"/>
                     <constraint firstItem="aqL-sC-55h" firstAttribute="top" secondItem="rad-bV-V3H" secondAttribute="bottom" constant="6" symbolic="YES" id="St2-7B-dNt"/>
                     <constraint firstItem="5Fy-ps-ztM" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Z9i-se-0Oa"/>
-                    <constraint firstItem="rad-bV-V3H" firstAttribute="top" secondItem="A00-R7-yCA" secondAttribute="bottom" constant="8" symbolic="YES" id="Zcf-Qb-ygI"/>
+                    <constraint firstItem="rad-bV-V3H" firstAttribute="top" secondItem="idh-xa-eVp" secondAttribute="bottom" constant="6" symbolic="YES" id="aVm-zE-1Jd"/>
                     <constraint firstItem="A00-R7-yCA" firstAttribute="top" secondItem="imk-6o-rc4" secondAttribute="bottom" constant="10" symbolic="YES" id="ai1-Ll-m9r"/>
                     <constraint firstItem="6cx-Hr-Aa2" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="bXH-pv-7gZ"/>
+                    <constraint firstAttribute="bottom" secondItem="oWt-3D-w5C" secondAttribute="bottom" constant="20" symbolic="YES" id="bq1-JZ-JVT"/>
+                    <constraint firstItem="MB6-Jr-Ckd" firstAttribute="leading" secondItem="eoZ-Zp-Afo" secondAttribute="trailing" constant="8" symbolic="YES" id="dsr-QE-eAb"/>
                     <constraint firstItem="oWt-3D-w5C" firstAttribute="leading" secondItem="6cx-Hr-Aa2" secondAttribute="trailing" constant="8" symbolic="YES" id="eHL-Wj-5zg"/>
                     <constraint firstItem="oWt-3D-w5C" firstAttribute="firstBaseline" secondItem="6cx-Hr-Aa2" secondAttribute="firstBaseline" id="fKa-dz-fJB"/>
-                    <constraint firstAttribute="bottom" secondItem="oWt-3D-w5C" secondAttribute="bottom" constant="20" symbolic="YES" id="fkg-hL-Jow"/>
+                    <constraint firstItem="MB6-Jr-Ckd" firstAttribute="firstBaseline" secondItem="eoZ-Zp-Afo" secondAttribute="firstBaseline" id="fii-Kz-9SB"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="rad-bV-V3H" secondAttribute="trailing" constant="20" symbolic="YES" id="gcp-0c-gye"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="idh-xa-eVp" secondAttribute="trailing" constant="20" symbolic="YES" id="hBX-s9-Zem"/>
                     <constraint firstItem="glz-Ut-eOg" firstAttribute="leading" secondItem="oWt-3D-w5C" secondAttribute="trailing" constant="8" symbolic="YES" id="hiz-2j-Hd8"/>
                     <constraint firstAttribute="trailing" secondItem="imk-6o-rc4" secondAttribute="trailing" constant="20" symbolic="YES" id="jQV-r2-RS0"/>
+                    <constraint firstItem="oWt-3D-w5C" firstAttribute="top" secondItem="aqL-sC-55h" secondAttribute="bottom" constant="8" symbolic="YES" id="oAb-lg-vJS"/>
+                    <constraint firstItem="eoZ-Zp-Afo" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="wF7-Sy-VrN"/>
                     <constraint firstItem="aqL-sC-55h" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="xRz-7Z-14h"/>
                     <constraint firstItem="A00-R7-yCA" firstAttribute="leading" secondItem="Izk-HZ-C4L" secondAttribute="trailing" constant="8" symbolic="YES" id="xS6-9Q-bUK"/>
+                    <constraint firstItem="idh-xa-eVp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="xs8-RO-Bbm"/>
                     <constraint firstItem="A00-R7-yCA" firstAttribute="leading" secondItem="imk-6o-rc4" secondAttribute="leading" id="zZn-QW-S3r"/>
                 </constraints>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="Zqu-El-OrH"/>
             </connections>
-            <point key="canvasLocation" x="63" y="80.5"/>
+            <point key="canvasLocation" x="63" y="122"/>
         </window>
     </objects>
     <resources>

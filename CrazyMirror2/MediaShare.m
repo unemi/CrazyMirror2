@@ -10,32 +10,59 @@
 #import "Preferences.h"
 #define TIME_SCALE 600
 
+static NSString *fnPrefix = @"CrazyMirror2";
+typedef enum { MediaTypePhoto, MediaTypeVideo } MyMediaType;
+
 void clear_useless_video_files(void) {
 	NSFileManager *fmn = NSFileManager.defaultManager;
 	NSString *dir = fmn.currentDirectoryPath;
 	for (NSString *path in [fmn contentsOfDirectoryAtPath:dir error:NULL])
-		if ([path hasPrefix:@"CrazyMirror2Video_"])
+		if ([path hasPrefix:fnPrefix])
 			[fmn removeItemAtPath:[dir stringByAppendingPathComponent:path] error:NULL];
 }
-
+BOOL setup_input_device(AVCaptureSession *ses, AVCaptureDevice *dev, AVMediaType mediaType) {
+	NSError *error;
+	AVCaptureDeviceInput *devIn = [AVCaptureDeviceInput deviceInputWithDevice:dev error:&error];
+	MyWarning(devIn, @"Cannot make a video device input. %@", error.localizedDescription);
+	if (devIn == nil) return NO;
+	AVCaptureDeviceInput *orgDevIn = nil;
+	for (AVCaptureDeviceInput *input in ses.inputs)
+		if ([input.device hasMediaType:mediaType]) { orgDevIn = input; break; }
+	if (orgDevIn != nil) [ses removeInput:orgDevIn];
+	BOOL canAddIt = [ses canAddInput:devIn];
+	MyWarning(canAddIt, @"Cannot add input.",nil)
+	if (canAddIt) {
+		[ses addInput:devIn];
+		return YES;
+	} else {
+		if (orgDevIn != nil) [ses addInput:orgDevIn];
+		return NO;
+	}
+}
 @implementation MyNotification
 - (NSString *)windowNibName { return @"MyNotification"; }
-- (void)setMessage:(NSString *)msg {
-	message = NSLocalizedString(msg, nil);
-}
-- (void)windowDidLoad {
-	msgTxt.stringValue = message;
-	openPhotosBtn.image = photos_app_icon();
+- (void)setupType:(MyMediaType)type URL:(NSURL *)url {
+	msgTxt.stringValue = NSLocalizedString(
+		(type == MediaTypePhoto)? @"Took a photo." : @"Recorded a video.", nil);
+	lookupBtn.image = ((URL = url) == nil)? photos_app_icon() :
+		[NSImage imageWithSystemSymbolName:
+			(type == MediaTypePhoto)? @"camera" : @"video" accessibilityDescription:nil];
+	infoTxt.stringValue = NSLocalizedString(
+		(URL == nil)? @"It was saved in your Photos library." :
+		(type == MediaTypePhoto)? @"It was saved in your Pictures folder." :
+			@"It was saved in your Movies folder.", nil);
 }
 - (IBAction)ok:(id)sender {
 	[timer invalidate];
 	[self.window orderOut:nil];
 }
-- (IBAction)openPhotos:(id)sender {
-	NSWorkspaceOpenConfiguration *config = NSWorkspaceOpenConfiguration.configuration;
-	config.activates = YES;
+- (IBAction)lookItUp:(id)sender {
 	NSWorkspace *wkspc = NSWorkspace.sharedWorkspace;
-	[wkspc openApplicationAtURL:photos_URL(wkspc) configuration:config completionHandler:nil];
+	if (URL == nil) {
+		NSWorkspaceOpenConfiguration *config = NSWorkspaceOpenConfiguration.configuration;
+		config.activates = YES;
+		[wkspc openApplicationAtURL:photos_URL(wkspc) configuration:config completionHandler:nil];
+	} else [wkspc selectFile:URL.absoluteURL.path inFileViewerRootedAtPath:@""];
 }
 - (void)windowDidBecomeKey:(NSNotification *)notification {
 	timeDgt.integerValue = 5;
@@ -61,11 +88,11 @@ static void check_photo_lib_access(void (^block)(void)) {
 	}
 }
 static MyNotification *myNotification = nil;
-static void show_notification(NSString *message, NSView *view) {
+static void show_notification(MyMediaType mediaType, NSURL *dstURL, NSView *view) {
 	in_main_thread( ^{
 		if (myNotification == nil) myNotification = [MyNotification.alloc initWithWindow:nil];
-		[myNotification setMessage:message];
 		NSWindow *myWin = myNotification.window;
+		[myNotification setupType:mediaType URL:dstURL];
 		NSRect rect = view.window.frame;
 		NSSize size = myWin.frame.size;
 		NSPoint origin = {rect.origin.x + (rect.size.width - size.width) / 2.,
@@ -76,7 +103,7 @@ static void show_notification(NSString *message, NSView *view) {
 	} );
 }
 static NSString *photo_path(NSString *fileExtension) {
-	return [NSString stringWithFormat:@"CrazyMirror2Photo_%05ld.%@",
+	return [NSString stringWithFormat:@"%@Photo_%05ld.%@", fnPrefix,
 		preferences.photoCount, fileExtension];
 }
 static void share_image_in_photosLib(NSBitmapImageRep *imgRep,
@@ -98,7 +125,7 @@ static void share_image_in_photosLib(NSBitmapImageRep *imgRep,
 			if (success) {
 				handler();
 				[preferences incPhotoCount];
-				show_notification(@"Took a photo.", view);
+				show_notification(MediaTypePhoto, nil, view);
 			} else err_msg(error, NO);
 		}]; });
 }
@@ -123,9 +150,11 @@ void save_photo_image(NSBitmapImageRep *imgRep, NSView *view, void (^handler)(vo
 				URLsForDirectory:NSPicturesDirectory inDomains:NSUserDomainMask];
 			if (urls == nil || urls.count < 1)
 				err_msg(@"Cannot identify Pictures folder.", NO);
-			else save_photo_as_file(imgRep,
-				[urls[0] URLByAppendingPathComponent:photo_path(@"jpeg")], handler); 
-			
+			else {
+				NSURL *url = [urls[0] URLByAppendingPathComponent:photo_path(@"jpeg")];
+				save_photo_as_file(imgRep, url, handler);
+				show_notification(MediaTypePhoto, url, view);
+			}
 		} break;
 		case SvPhtInUserFolder: {
 			NSSavePanel *sp = NSSavePanel.new;
@@ -150,7 +179,7 @@ static void share_movie_in_photosLib(NSURL *srcURL, NSView *view, void (^handler
 		MyWarning(success, @"%@", error)
 		else {
 			handler();
-			show_notification(@"Record a video.", view);
+			show_notification(MediaTypeVideo, nil, view);
 		}
 	}]; });
 }
@@ -160,31 +189,11 @@ static void save_movie_in_file(NSURL *srcURL, NSURL *dstURL, void (^handler)(voi
 		handler();
 	else err_msg(error, NO);
 }
-static void save_video_movie(NSURL *srcURL, NSView *view, void (^handler)(void)) {
-	switch (preferences.svVideo) {
-		case SvVidInPhotosLib: share_movie_in_photosLib(srcURL, view, handler); break;
-		case SvVidInMovieFolder: {
-			NSArray<NSURL *> *urls = [NSFileManager.defaultManager
-				URLsForDirectory:NSMoviesDirectory inDomains:NSUserDomainMask];
-			if (urls == nil || urls.count < 1)
-				err_msg(@"Cannot identify Movies folder.", NO);
-			else save_movie_in_file(srcURL,
-				[urls[0] URLByAppendingPathComponent:srcURL.lastPathComponent], handler);
-		} break;
-		case SvVidInUserFolder: in_main_thread(^{
-			NSSavePanel *sp = NSSavePanel.new;
-			sp.nameFieldStringValue = srcURL.lastPathComponent;
-			sp.allowedFileTypes = @[(NSString *)kUTTypeQuickTimeMovie];
-			[sp beginSheetModalForWindow:view.window completionHandler:^(NSModalResponse result) {
-				if (result != NSModalResponseOK) return;
-				save_movie_in_file(srcURL, sp.URL, handler);
-			}];
-		});
-	}
-}
+#if defined DEBUG || defined DEBUG_I
+static int logCNT = 0;
+#endif
 #ifdef DEBUG_I
 static FILE *logFD = NULL;
-static int logCNT = 0;
 static void MyLog(char *fmt, ...) {
 	time_t sec;
 	time(&sec);
@@ -193,6 +202,7 @@ static void MyLog(char *fmt, ...) {
 	va_list aList;
 	va_start(aList, fmt);
 	vfprintf(logFD, fmt, aList);
+	fputs("\n", logFD);
 	fflush(logFD);
 	va_end(aList);
 }
@@ -200,103 +210,197 @@ static void MyLog(char *fmt, ...) {
 
 @interface MediaShare () {
 	NSView *view;
-	NSURL *URL;
+	NSURL *URL, *audioURL;
 	AVAssetWriter *writer;
 	AVAssetWriterInput *imageInput;
-	AVAssetWriterInputPixelBufferAdaptor *adaptor;
+	AVAssetWriterInputPixelBufferAdaptor *pxBufAdaptor;
 	struct timeval startTime;
 	NSMutableArray *frameQue;
 	NSConditionLock *queLock;
+	AVCaptureAudioFileOutput *audioOut;
 }
 @end
 
 @implementation MediaShare
-- (void)videoFrameLoop {
-	void (^completionHandler)(void) = nil;
-	MyLog("videoFrameLoop start\n");
-	@try {
-		while (imageInput.readyForMoreMediaData) {
-			[queLock lockWhenCondition:YES];
-			id task = frameQue[0];
-			[frameQue removeObjectAtIndex:0];
-			[queLock unlockWithCondition:frameQue.count > 0];
-			if ([task isKindOfClass:NSArray.class]) {
-				NSBitmapImageRep *imgRep = ((NSArray *)task)[0];
-				CMTimeValue playTime = [((NSArray *)task)[1] integerValue];
-				CVPixelBufferRef pixBuffer;
-				OSStatus status = CVPixelBufferCreateWithBytes(NULL,
-					imgRep.pixelsWide, imgRep.pixelsHigh, kCVPixelFormatType_32ARGB,
-					imgRep.bitmapData, imgRep.bytesPerRow, NULL, NULL, NULL, &pixBuffer);
-				if (status != noErr) @throw @"Cannot make CVPixelBuffer";
-				BOOL result = [adaptor appendPixelBuffer:pixBuffer
-					withPresentationTime:(CMTime){playTime, TIME_SCALE, 1, 0}];
-#ifdef DEBUG_I
-	if (logCNT == 0) MyLog("appendPixelBuffer %d\n", result);
-#endif
-				usleep(1000);
-				CFRelease(pixBuffer);
-#ifdef DEBUG_I
-	if (logCNT == 0) MyLog("CFRelease PixelBuffer\n");
-#endif
-				if (!result) @throw @"Cannot append a frame image.";
-			} else { completionHandler = (void (^)(void))task; break; }
-#ifdef DEBUG_I
-	if (logCNT == 0) MyLog("back to loop head\n");
-	 logCNT ++;
-#endif
-		}
-	} @catch (NSString *msg) { err_msg(msg, NO); return; }
-	MyLog("videoFrameLoop end %d\n", logCNT);
-	[writer endSessionAtSourceTime:(CMTime){self.playTime, TIME_SCALE, 1, 0}];
-	[writer finishWritingWithCompletionHandler:^{
-		MyLog("Finalization completed\n");
-		save_video_movie(self->URL, self->view, completionHandler);
-	}];
+- (void)captureOutput:(AVCaptureFileOutput *)output
+	didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL
+	fromConnections:(NSArray<AVCaptureConnection *> *)connections error:(NSError *)error {
+	NSLog(@"captureOutput:didFinishRecordingToOutputFileAtURL:");
 }
-- (void)videoThread:(NSBitmapImageRep *)imgRep {
-	MyLog("videoThread start\n");
-	NSThread.currentThread.name = @"video recording thread";
-	NSFileManager *fmn = NSFileManager.defaultManager;
-	NSInteger ID = preferences.videoCount;
-	while (URL == nil) {
-		NSString *filePath = [NSString stringWithFormat:@"CrazyMirror2Video_%05ld.MOV", ID];
-		if ([fmn fileExistsAtPath:filePath]) ID ++;
-		else if ((URL = [NSURL fileURLWithPath:filePath]) == nil)
-			@throw @"Cannot make a file URL.";
-	}
-	preferences.videoCount = ID;
+- (void)setupAudioIOIfNeeded:(AVCaptureSession *)ses {
+	if (preferences.recAudioFrom == nil) return;
+	MyLog("recAudioFrom %s", preferences.recAudioFrom.UTF8String);
+	@try {
+		AVCaptureDevice *mic = nil;
+		for (AVCaptureDevice *dev in get_microphones())
+			if ([dev.localizedName isEqualToString:preferences.recAudioFrom])
+				{ mic = dev; break; }
+		if (mic == nil) mic = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeAudio];
+		if (mic == nil) @throw @"No audio input available.";
+		if (!setup_input_device(ses, mic, AVMediaTypeAudio)) @throw @"Cannot setup audio input";
+		audioOut = AVCaptureAudioFileOutput.new;
+		if (![ses canAddOutput:audioOut]) @throw @"Cannot add audio output to the session.";
+		[ses addOutput:audioOut];
+		NSString *path = [NSString stringWithFormat:
+			@"%@Sound%05ld.m4a", fnPrefix, preferences.videoCount];
+		NSFileManager *fmn = NSFileManager.defaultManager;
+		if ([fmn fileExistsAtPath:path]) [fmn removeItemAtPath:path error:NULL];
+		audioURL = [NSURL fileURLWithPath:path];
+		[audioOut startRecordingToOutputFileURL:audioURL
+			outputFileType:AVFileTypeAppleM4A recordingDelegate:self];
+	} @catch (NSObject *obj) { err_msg(obj, NO); }
+}
+static void insert_track(AVMutableComposition *compo, NSURL *url) {
+	AVAsset *asset = [AVAsset assetWithURL:url];
+	NSArray<AVAssetTrack *> *trks = asset.tracks;
+	if (trks == nil || trks.count <= 0)
+		@throw [NSString stringWithFormat:@"%@ has no track.", url.lastPathComponent];
+	AVAssetTrack *trk = trks[0];
 	NSError *error;
-	writer = [AVAssetWriter assetWriterWithURL:URL fileType:AVFileTypeMPEG4 error:&error];
-	if (writer == nil) @throw error;
+	CMTimeRange tmRange = trk.timeRange;
+#ifdef DEBUG
+	NSLog(@"%lld, %lld/%d %@", tmRange.start.value, tmRange.duration.value,
+		tmRange.duration.timescale, url.lastPathComponent);
+#endif
+	AVMutableCompositionTrack *cTrack = [compo addMutableTrackWithMediaType:
+		trk.mediaType preferredTrackID:kCMPersistentTrackID_Invalid];
+	BOOL result = [cTrack insertTimeRange:tmRange ofTrack:trk atTime:kCMTimeZero error:&error];
+	if (!result) @throw error;
+}
+- (void)saveVideoMovieWithHandler:(void (^)(void))handler {
+	if (audioURL != nil) { @try {
+		AVMutableComposition *compo = AVMutableComposition.composition;
+		insert_track(compo, URL);
+		insert_track(compo, audioURL);
+		AVAssetExportSession *exporter = [AVAssetExportSession exportSessionWithAsset:compo
+			presetName:AVAssetExportPresetPassthrough];
+		exporter.outputURL = [NSURL fileURLWithPath:
+			[NSString stringWithFormat:@"%@_tmp.MOV", URL.path.stringByDeletingPathExtension]];
+		exporter.outputFileType = AVFileTypeQuickTimeMovie;
+		NSCondition *cond = NSCondition.new; [cond lock];
+		[exporter exportAsynchronouslyWithCompletionHandler:^{ [cond signal]; }];
+		[cond wait]; [cond unlock];
+		if (exporter.status != AVAssetExportSessionStatusCompleted)
+			@throw @"AVAssetExportSession could not completed.";
+		NSFileManager *fmn = NSFileManager.defaultManager;
+		NSError *error;
+		if (![fmn removeItemAtURL:URL error:&error]) @throw error;
+		if (![fmn removeItemAtURL:audioURL error:&error]) @throw error;
+		if (![fmn moveItemAtURL:exporter.outputURL toURL:URL error:&error]) @throw error;
+	} @catch (NSObject *obj) { err_msg(obj, NO); }}
+	switch (preferences.svVideo) {
+		case SvVidInPhotosLib: share_movie_in_photosLib(URL, view, handler); break;
+		case SvVidInMovieFolder: {
+			NSArray<NSURL *> *urls = [NSFileManager.defaultManager
+				URLsForDirectory:NSMoviesDirectory inDomains:NSUserDomainMask];
+			if (urls == nil || urls.count < 1)
+				err_msg(@"Cannot identify Movies folder.", NO);
+			else {
+				NSURL *url = [urls[0] URLByAppendingPathComponent:URL.lastPathComponent];
+				save_movie_in_file(URL, url, handler);
+				show_notification(MediaTypeVideo, url, view);
+			}
+		} break;
+		case SvVidInUserFolder: in_main_thread(^{
+			NSSavePanel *sp = NSSavePanel.new;
+			sp.nameFieldStringValue = self->URL.lastPathComponent;
+			sp.allowedFileTypes = @[(NSString *)kUTTypeQuickTimeMovie];
+			[sp beginSheetModalForWindow:self->view.window completionHandler:^(NSModalResponse result) {
+				if (result != NSModalResponseOK) return;
+				save_movie_in_file(self->URL, sp.URL, handler);
+			}];
+		});
+	}
+}
+static BOOL wait_for_input_ready(AVAssetWriterInput *input) {
+	for (NSInteger i = 0; i < 2000; i ++) {
+		if (input.readyForMoreMediaData) return YES;
+		else usleep(1000);
+	}
+	return NO; 
+}
+- (void)recordingWithImg:(NSBitmapImageRep *)imgRep session:(AVCaptureSession *)ses {
 	imageInput = [AVAssetWriterInput
 		assetWriterInputWithMediaType:AVMediaTypeVideo outputSettings:
 		@{AVVideoWidthKey:@(imgRep.pixelsWide), AVVideoHeightKey:@(imgRep.pixelsHigh),
 		  AVVideoCodecKey:AVVideoCodecTypeHEVC}];
 	imageInput.expectsMediaDataInRealTime = YES;
-	adaptor = [AVAssetWriterInputPixelBufferAdaptor
+	pxBufAdaptor = [AVAssetWriterInputPixelBufferAdaptor
 		assetWriterInputPixelBufferAdaptorWithAssetWriterInput:imageInput
 		sourcePixelBufferAttributes:nil];
 	[writer addInput:imageInput];
+	[self setupAudioIOIfNeeded:ses];
 	if (![writer startWriting]) @throw writer.error;
 	[writer startSessionAtSourceTime:kCMTimeZero];
-	[imageInput requestMediaDataWhenReadyOnQueue:
-		dispatch_queue_create("Video frames feeder", DISPATCH_QUEUE_SERIAL)
-		usingBlock:^{ [self videoFrameLoop]; }];
-	MyLog("videoThread end\n");
+//
+	void (^completionHandler)(void) = nil;
+	MyLog("videoFrameLoop start");
+	while (completionHandler == nil) { @try {
+		[queLock lockWhenCondition:YES];
+		id task = frameQue[0];
+		[frameQue removeObjectAtIndex:0];
+		[queLock unlockWithCondition:frameQue.count > 0];
+		if ([task isKindOfClass:NSArray.class]) {
+			NSBitmapImageRep *imgRep = ((NSArray *)task)[0];
+			CMTimeValue playTime = [((NSArray *)task)[1] integerValue];
+			CVPixelBufferRef pixBuffer;
+			OSStatus status = CVPixelBufferCreateWithBytes(NULL,
+				imgRep.pixelsWide, imgRep.pixelsHigh, kCVPixelFormatType_32ARGB,
+				imgRep.bitmapData, imgRep.bytesPerRow, NULL, NULL, NULL, &pixBuffer);
+			if (status != noErr) @throw @"Cannot make CVPixelBuffer";
+			if (!wait_for_input_ready(imageInput)) @throw @"Timeout to add frame image.";
+			BOOL result = [pxBufAdaptor appendPixelBuffer:pixBuffer
+				withPresentationTime:(CMTime){playTime, TIME_SCALE, 1, 0}];
+#if defined DEBUG || defined DEBUG_I
+	if (logCNT == 0) MyLog("appendPixelBuffer %d", result);
+#endif
+			usleep(1000);
+			CFRelease(pixBuffer);
+#if defined DEBUG || defined DEBUG_I
+	if (logCNT == 0) MyLog("CFRelease PixelBuffer");
+#endif
+			if (!result) @throw @"Cannot append a frame image.";
+		} else completionHandler = (void (^)(void))task;
+#if defined DEBUG || defined DEBUG_I
+	if (logCNT == 0) MyLog("back to loop head");
+	logCNT ++;
+#endif
+	} @catch (NSString *msg) { err_msg(msg, NO); break; } }
+	MyLog("videoFrameLoop end %d", logCNT);
+	if (audioOut != nil) [audioOut stopRecording];
+	[writer endSessionAtSourceTime:(CMTime){self.playTime, TIME_SCALE, 1, 0}];
+	[writer finishWritingWithCompletionHandler:^{
+		MyLog("Finalization completed");
+		[self saveVideoMovieWithHandler:completionHandler];
+	}];
 }
-- (instancetype)initWithImgRep:(NSBitmapImageRep *)imgRep view:(NSView *)v {
+- (instancetype)initWithImgRep:(NSBitmapImageRep *)imgRep view:(NSView *)v
+	session:(AVCaptureSession *)ses {
 	if (!(self = [super init])) return nil;
 #ifdef DEBUG_I
 	if (logFD == NULL) {
-		logFD = fopen("tmp/CrazzyMirror2.log", "w");
+		logFD = fopen("tmp/CrazyMirror2.log", "w");
 		MyAssert(logFD, @"Couldn't make logfile (%d).", errno)
 	}
-	MyLog("MediaShare was initialized.\n");
+	MyLog("MediaShare was initialized.");
 #endif
 	view = v;
 	frameQue = NSMutableArray.new;
 	queLock = NSConditionLock.new;
-	[NSThread detachNewThreadSelector:@selector(videoThread:) toTarget:self withObject:imgRep];
+
+	NSFileManager *fmn = NSFileManager.defaultManager;
+	NSInteger ID = preferences.videoCount;
+	while (URL == nil) {
+		NSString *filePath = [NSString stringWithFormat:@"%@Video_%05ld.MOV", fnPrefix, ID];
+		if ([fmn fileExistsAtPath:filePath]) ID ++;
+		else if ((URL = [NSURL fileURLWithPath:filePath]) == nil)
+			{ err_msg(@"Cannot make a file URL for video.", NO); return nil; }
+	}
+	preferences.videoCount = ID;
+	NSError *error;
+	writer = [AVAssetWriter assetWriterWithURL:URL fileType:AVFileTypeMPEG4 error:&error];
+	if (writer == nil) { err_msg(error, NO); return nil; }	
+	[NSThread detachNewThreadWithBlock:^{ [self recordingWithImg:imgRep session:ses]; }];
 	return self;
 }
 - (CMTimeValue)playTime {

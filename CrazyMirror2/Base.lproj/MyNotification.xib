@@ -8,8 +8,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MyNotification">
             <connections>
+                <outlet property="infoTxt" destination="y2X-gk-Yy2" id="ktP-xc-LOD"/>
+                <outlet property="lookupBtn" destination="Kjc-Q5-AAd" id="Ica-qc-F3E"/>
                 <outlet property="msgTxt" destination="DPG-nK-UFi" id="puH-zG-T7a"/>
-                <outlet property="openPhotosBtn" destination="Kjc-Q5-AAd" id="Ica-qc-F3E"/>
                 <outlet property="timeDgt" destination="ptI-am-oqE" id="3Sb-du-TEL"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="Tgt-qQ-Thh"/>
             </connections>
@@ -33,8 +34,8 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="y2X-gk-Yy2">
-                        <rect key="frame" x="74" y="90" width="217" height="16"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="It was stored in your Photos library." id="3cG-SZ-DLg">
+                        <rect key="frame" x="74" y="90" width="214" height="16"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="It was saved in your Photos library." id="3cG-SZ-DLg">
                             <font key="font" usesAppearanceFont="YES"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -73,13 +74,13 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Kjc-Q5-AAd">
-                        <rect key="frame" x="13" y="13" width="114" height="32"/>
-                        <buttonCell key="cell" type="push" title="Open Photos" bezelStyle="rounded" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zEr-xX-8OO">
+                        <rect key="frame" x="13" y="13" width="96" height="32"/>
+                        <buttonCell key="cell" type="push" title="Loop it up" bezelStyle="rounded" imagePosition="left" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zEr-xX-8OO">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="openPhotos:" target="-2" id="o0O-8r-YKl"/>
+                            <action selector="lookItUp:" target="-2" id="o0O-8r-YKl"/>
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ABU-h2-sXi">

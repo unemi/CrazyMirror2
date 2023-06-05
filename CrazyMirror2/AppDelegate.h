@@ -23,7 +23,7 @@ extern void err_msg(NSObject *object, BOOL fatal);
 @interface CrazyMirror : MTKView
 	<AVCaptureVideoDataOutputSampleBufferDelegate, NSMenuItemValidation> {
 	NSArray<AVCaptureDevice *> *cameras;
-	AVCaptureDeviceDiscoverySession *devSearch;
+	AVCaptureDeviceDiscoverySession *camSearch;
 	AVCaptureDevice *camera;
 	AVCaptureSession *ses;
 	MTLRenderPipelineDescriptor *pplnStDesc;
@@ -47,7 +47,7 @@ extern void err_msg(NSObject *object, BOOL fatal);
 	NSTimer *alternator, *fullScrMsgTimer, *cursorHidingTimer;
 	CGFloat fullScrMsgClock;
 	NSSound *cameraShutterSnd;
-	BOOL takePhoto, recVideo;
+	BOOL takePhoto, recVideo, recInPortraitMode;
 	NSImage *videoItemImg;
 	MediaShare *mediaShare;
 	VideoRecordingView *recIndicator;

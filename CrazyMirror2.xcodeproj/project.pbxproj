@@ -383,7 +383,7 @@
 				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -393,6 +393,7 @@
 				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Taken photo and recorded video is saved in folder you chosen.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio input may be used when video recordding.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Taken photo and recoded video is stored in Photo library.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -400,7 +401,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -415,7 +416,7 @@
 				CODE_SIGN_ENTITLEMENTS = CrazyMirror2/CrazyMirror2.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 726X5Z9867;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -425,6 +426,7 @@
 				INFOPLIST_KEY_NSFileProviderDomainUsageDescription = "Taken photo and recorded video is saved in folder you chosen.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© Tatsuo Unemi, 2023.";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Audio input may be used when video recordding.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Taken photo and recoded video is stored in Photo library.";
 				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -432,7 +434,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.3;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = jp.ac.soka.unemi.CrazyMirror2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

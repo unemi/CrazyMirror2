@@ -70,18 +70,7 @@ struct {
 
 @implementation CrazyMirror
 - (void)setupCamera:(AVCaptureDevice *)cam {
-	NSError *error;
-	AVCaptureDeviceInput *devIn = [AVCaptureDeviceInput deviceInputWithDevice:cam error:&error];
-	MyWarning(devIn, @"Cannot make a video device input. %@", error);
-	if (devIn == nil) return;
-	AVCaptureDeviceInput *orgDevIn = nil;
-	if (ses.inputs.count > 0) [ses removeInput:(orgDevIn = ses.inputs[0])];
-	BOOL canAddIt = [ses canAddInput:devIn];
-	MyWarning(canAddIt, @"Cannot add input.",nil)
-	if (canAddIt) {
-		[ses addInput:devIn];
-		camera = cam;
-	} else if (orgDevIn != nil) [ses addInput:orgDevIn];
+	setup_input_device(ses, cam, AVMediaTypeVideo);
 }
 - (void)setupCameraList:(NSArray<AVCaptureDevice *> *)camList {
 	MyAssert(camList.count, @"No Camera available.",nil);
@@ -98,9 +87,7 @@ struct {
 }
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object 
 	change:(NSDictionary<NSKeyValueChangeKey, id> *)change context:(void *)context {
-	if (object == devSearch) {
-		[self setupCameraList:change[NSKeyValueChangeNewKey]];
-	}
+	if (object == camSearch) [self setupCameraList:change[NSKeyValueChangeNewKey]];
 }
 - (id<MTLComputePipelineState>)makeCompPL:(NSString *)name {
 	id<MTLFunction> func = [dfltLib newFunctionWithName:name];
@@ -136,12 +123,12 @@ struct {
 //
 //	Initialize capture session by default camera
 	ses = AVCaptureSession.new;
-	devSearch = [AVCaptureDeviceDiscoverySession
+	camSearch = [AVCaptureDeviceDiscoverySession
 		discoverySessionWithDeviceTypes:@[AVCaptureDeviceTypeBuiltInWideAngleCamera,
 			AVCaptureDeviceTypeExternalUnknown]
 			mediaType:AVMediaTypeVideo position:AVCaptureDevicePositionUnspecified];
-	[self setupCameraList:devSearch.devices];
-	[devSearch addObserver:self forKeyPath:@"devices"
+	[self setupCameraList:camSearch.devices];
+	[camSearch addObserver:self forKeyPath:@"devices"
 		options:NSKeyValueObservingOptionNew context:nil];
 	AVCaptureSessionPreset preset = AVCaptureSessionPreset1920x1080;
 	MyAssert([ses canSetSessionPreset:preset], @"Cannot set session preset as %@.", preset);
@@ -270,9 +257,13 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	return imgRep;
 }
 - (void)stopVideoRecording {
+	for (AVCaptureDeviceInput *input in ses.inputs)
+		if ([input.device hasMediaType:AVMediaTypeAudio])
+			{ [ses removeInput:input]; break; }
 	mediaShare = nil;
 	recVideo = NO;
 	self.framebufferOnly = YES;
+	[self resignRecordingIndicator];
 }
 - (void)drawRect:(NSRect)dirtyRect {
 	if (frmsBuffer == nil) return;
@@ -309,6 +300,8 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	[rce setViewport:(MTLViewport){0., 0., viewSize.width, viewSize.height, 0., 1. }];
 	[rce setRenderPipelineState:pipeLine];
 	simd_float2 vertices[4] = {{-1, -1},{-1, 1},{1, -1},{1, 1}};
+	if (preferences.portraitMode)
+		for (NSInteger i = 0; i < 4; i ++) vertices[i].x *= (9./16.)*(9./16.);
 	[rce setVertexBytes:vertices length:sizeof(vertices) atIndex:0];
 	[rce setFragmentBytes:intInfo length:sizeof(intInfo) atIndex:idx ++];
 	floatInfo.z = (current_time_ms() % 10000) / 10000.f;
@@ -324,19 +317,21 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	[cmdBuf presentDrawable:self.currentDrawable];
 
 	id<MTLBuffer> frameImageBuf = nil;
-	NSUInteger texW = 0, texH = 0;
+	NSUInteger texW = 0, texH = 0, pixW = 0;
 	if (takePhoto || recVideo) {
 		id<MTLTexture> tex = self.currentDrawable.texture;
 		MyAssert(tex, @"Failed to get texture from MTKView.", nil);
 		texW = tex.width; texH = tex.height;
-		frameImageBuf = [tex.device newBufferWithLength:texW * texH * 4
+		pixW = recInPortraitMode? texH * 9 / 16 : texW;
+		frameImageBuf = [tex.device newBufferWithLength:pixW * texH * 4
 			options:MTLResourceStorageModeShared];
-		MyAssert(frameImageBuf, @"Failed to create buffer for %ld bytes.", texW * texH * 4);
+		MyAssert(frameImageBuf, @"Failed to create buffer for %ld bytes.", pixW * texH * 4);
 		id<MTLBlitCommandEncoder> blitEnc = cmdBuf.blitCommandEncoder;
 		[blitEnc copyFromTexture:tex sourceSlice:0 sourceLevel:0
-			sourceOrigin:(MTLOrigin){0, 0, 0} sourceSize:(MTLSize){texW, texH, 1}
+			sourceOrigin:(MTLOrigin){(texW - pixW) / 2, 0, 0}
+			sourceSize:(MTLSize){pixW, texH, 1}
 			toBuffer:frameImageBuf destinationOffset:0
-			destinationBytesPerRow:texW * 4 destinationBytesPerImage:texW * texH * 4];
+			destinationBytesPerRow:pixW * 4 destinationBytesPerImage:pixW * texH * 4];
 		[blitEnc endEncoding];
 	}
 	[cmdBuf commit];
@@ -345,7 +340,7 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 	EFCT_TYPE &= ~ EFCT_CHANGED;
 	if (mask & ArgDifsMask) EFCT_TYPE ^= DIFS_BACK;
 	if (takePhoto || recVideo) {
-		NSBitmapImageRep *imgRep = make_bitmap_from_buffer(frameImageBuf, texW, texH);
+		NSBitmapImageRep *imgRep = make_bitmap_from_buffer(frameImageBuf, pixW, texH);
 		imgRep.size = self.bounds.size;
 		if (takePhoto) {
 			NSImage *orgImg = photoItem.image;
@@ -358,8 +353,8 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 			if (!recVideo) self.framebufferOnly = YES;
 		}
 		if (recVideo) {
-			if (mediaShare == nil)
-				mediaShare = [MediaShare.alloc initWithImgRep:imgRep view:self];
+			if (mediaShare == nil) mediaShare = [MediaShare.alloc
+				initWithImgRep:imgRep view:self session:ses];
 			if (![mediaShare addFrameImgRep:imgRep]) [self stopVideoRecording];
 		}
 	}
@@ -468,14 +463,15 @@ static NSBitmapImageRep *make_bitmap_from_buffer(
 }
 - (IBAction)takePhoto:(id)sender {
 	takePhoto = YES;
+	recInPortraitMode = preferences.portraitMode;
 }
 - (IBAction)recordVideo:(id)sender {
 	if (recVideo) {
 		[mediaShare finishWithHandler:^{ [preferences incVideoCount]; }];
 		[self stopVideoRecording];
-		[self resignRecordingIndicator];
 	} else {
 		recVideo = YES;
+		recInPortraitMode = preferences.portraitMode;
 		self.framebufferOnly = NO;
 		[self setupRecordingIndicator];
 	}

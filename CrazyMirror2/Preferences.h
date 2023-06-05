@@ -6,6 +6,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+@import AVFoundation;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,12 +26,14 @@ typedef enum {
 extern NSString *noteIntervalChanged;
 extern NSURL *photos_URL(NSWorkspace *wkspc);
 extern NSImage *photos_app_icon(void);
+extern NSArray<AVCaptureDevice *> *get_microphones(void);
 
 @interface PreferenceData : NSObject
 @property NSInteger photoCount, videoCount;
 @property SaveModeForPhoto svPhoto;
 @property SaveModeForVideo svVideo;
-@property BOOL startFullScr, startAuto;
+@property BOOL startFullScr, startAuto, portraitMode;
+@property NSString * _Nullable recAudioFrom;
 @property CGFloat interval;
 - (void)incPhotoCount;
 - (void)incVideoCount;

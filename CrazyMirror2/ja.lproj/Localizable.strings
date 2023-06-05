@@ -9,4 +9,7 @@
 "Show Toolbar" = "ツールバーをだす";
 "No Camera available." = "つかえるカメラがありません";
 "Took a photo." = "しゃしんをとりました。";
-"Record a video." = "ビデオをとりました。";
+"Recorded a video." = "ビデオをとりました。";
+"It was saved in your Photos library." = "写真ライブラリにほぞんされました。";
+"It was saved in your Pictures folder." = "ピクチャフォルダにほぞんされました。";
+"It was saved in your Movies folder." = "ムービーフォルダにほぞんされました。";
